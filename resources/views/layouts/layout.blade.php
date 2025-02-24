@@ -77,7 +77,7 @@
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2></h2>
+                            <h2>{{ Auth::user()->user_nama }}</h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -89,7 +89,7 @@
                         <div class="menu_section">
                             <ul class="nav side-menu">
                                 <li>
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="{{ route('dashboard')}}">
                                         <i class="fa fa-home"></i> Home
                                     </a>
                                 </li>
@@ -160,13 +160,13 @@
                                     </a>
                                     <a class="dropdown-item" href="javascript:;">Help</a>
                                     <!-- Link untuk Logout -->
-                                    <a class="dropdown-item" href="#"
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="fa fa-sign-out pull-right"></i> Log Out
                                     </a>
 
                                     <!-- Formulir untuk Logout -->
-                                    <form id="logout-form" action="#" method="POST" style="display: none;">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                                 </div>

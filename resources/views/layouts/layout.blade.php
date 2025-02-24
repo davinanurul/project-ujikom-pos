@@ -121,9 +121,9 @@
                                 <li><a><i class="fa fa-bar-chart-o"></i> Referensi<span
                                             class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Jenis Barang</a></li>
-                                        <li><a href="#">Daftar Pengguna</a></li>
-                                        <li><a href="#">Daftar Siswa</a></li>
+                                        <li><a href="{{ route('supplier.index')}}">Supplier</a></li>
+                                        <li><a href="#">User</a></li>
+                                        <li><a href="#">Satuan</a></li>
                                     </ul>
                                 </li>
                             </ul>

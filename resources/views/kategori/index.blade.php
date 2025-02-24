@@ -27,7 +27,7 @@
                                         <tr>
                                             <td class="text-center">{{ $kategori->nama_kategori }}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-warning btn-sm edit-btn" data-id="{{ $kategori->id_kategori }}"
+                                                <button class="btn btn-warning btn edit-btn" data-id="{{ $kategori->id_kategori }}"
                                                     data-nama="{{ $kategori->nama_kategori }}" data-toggle="modal"
                                                     data-target="#editKategoriModal">
                                                     <i class="fa fa-edit"></i> Edit
@@ -139,6 +139,24 @@
                 document.getElementById('delete_id').value = id;
                 document.getElementById('deleteForm').action = `/kategori/${id}`;
             });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: {!! json_encode(session('success')) !!}
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: {!! json_encode(session('error')) !!}
+                });
+            @endif
         });
     </script>
 @endsection

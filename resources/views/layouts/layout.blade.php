@@ -122,7 +122,7 @@
                                             class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('supplier.index')}}">Supplier</a></li>
-                                        <li><a href="#">User</a></li>
+                                        <li><a href="{{ route('user.index')}}">User</a></li>
                                         <li><a href="#">Satuan</a></li>
                                     </ul>
                                 </li>

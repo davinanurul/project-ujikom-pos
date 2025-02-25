@@ -97,18 +97,16 @@
                                             class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('kategori.index')}}">Kategori</a></li>
-                                        <li><a href="#">Produk</a></li>
+                                        <li><a href="{{ route('produk.index')}}">Produk</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i>Transaksi <span
                                             class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Daftar Peminjaman</a>
+                                        <li><a href="#">Pembelian</a>
                                         </li>
-                                        <li><a href="#">Pengembalian Barang</a>
+                                        <li><a href="#">Pengembalian</a>
                                         </li>
-                                        <li><a href="#">Barang Belum
-                                                Kembali</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Laporan <span class="fa fa-chevron-down"></span></a>

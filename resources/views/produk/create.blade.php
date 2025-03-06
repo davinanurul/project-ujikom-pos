@@ -19,7 +19,7 @@
                         </select>
                     </div>
                     <div class="form-group mt-0">
-                        <label for="supplier_id">Kategori</label>
+                        <label for="supplier_id">Supplier</label>
                         <select name="supplier_id" id="supplier_id" class="form-control" required>
                             <option value="">Pilih Supplier</option>
                             @foreach ($suppliers as $supplier)
@@ -36,8 +36,8 @@
                         <input type="text" name="nama" id="nama" class="form-control" required>
                     </div>
                     <div class="form-group mt-0">
-                        <label for="keuntungan">Keuntungan</label>
-                        <input type="double" name="keuntungan" id="keuntungan" class="form-control" required>
+                        <label for="harga_jual">Harga Jual</label>
+                        <input type="number" name="harga_jual" id="harga_jual" class="form-control" required>
                     </div>
                     <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary">Simpan</button>

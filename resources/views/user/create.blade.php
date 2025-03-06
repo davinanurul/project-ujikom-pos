@@ -38,8 +38,8 @@
                         <select class="form-control @error('user_hak') is-invalid @enderror" id="user_hak" name="user_hak"
                             required>
                             <option value="" disabled {{ old('user_hak') ? '' : 'selected' }}>Pilih Role</option>
-                            <option value="ad" {{ old('user_hak') == 'ad' ? 'selected' : '' }}>Admin</option>
-                            <option value="us" {{ old('user_hak') == 'us' ? 'selected' : '' }}>User</option>
+                            <option value="ad" {{ old('user_hak') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="us" {{ old('user_hak') == 'operator' ? 'selected' : '' }}>Operator</option>
                         </select>
                         @error('user_hak')
                             <div class="invalid-feedback">{{ $message }}</div>

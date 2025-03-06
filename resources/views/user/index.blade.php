@@ -1,64 +1,81 @@
 @extends('layouts.layout')
 @section('title', 'Daftar Pengguna')
 @section('content')
-    <div role="main">
-        <div class="">
-            <div class="row">
-                <div class="col-md-12 col-sm-12">
-                    <div class="x_panel">
-                        <div class="x_title d-flex justify-content-between">
-                            <a href="{{ route('user.create')}}" class="btn btn-primary">
-                                <i class="fa fa-plus"></i>
-                                Tambah User
-                            </a>
-                            <button class="btn btn-success" onclick="window.print();">
-                                <i class="fa fa-print"></i> Print/Ekspor
-                            </button>
-                        </div>
-                        <div class="x_content">
-                            <table class="table table-striped jambo_table bulk_action" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ID</th>
-                                        <th class="text-center">NAMA USER</th>
-                                        <th class="text-center">HAK AKSES</th>
-                                        <th class="text-center">TANGGAL DIBUAT</th>
-                                        <th class="text-center">STATUS</th>
-                                        <th class="text-center">AKSI</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($daftarPengguna as $daftarPengguna)
-                                        <tr>
-                                            <td>{{ $daftarPengguna->user_id }}</td>
-                                            <td>{{ $daftarPengguna->user_nama }}</td>
-                                            <td>{{ $daftarPengguna->user_hak }}</td>
-                                            <td>{{ $daftarPengguna->created_at}}</td>
-                                            <td>{{ $daftarPengguna->user_sts ? 'Aktif' : 'Nonaktif' }}</td>
-                                            <td style="width: 10%">
-                                                @if ($daftarPengguna->user_sts)
-                                                    <button class="btn btn-small btn-danger"
-                                                        onclick="confirmDeactivation({{ $daftarPengguna->user_id }}, 'nonaktifkan')">
-                                                        Nonaktifkan
-                                                    </button>
-                                                @else
-                                                    <button class="btn btn-small btn-success"
-                                                        onclick="confirmDeactivation({{ $daftarPengguna->user_id }}, 'aktifkan')">
-                                                        Aktifkan
-                                                    </button>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{{ route('user.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah User
+            </a>
+            <button class="btn btn-success" onclick="window.print();">
+                <i class="fas fa-print"></i> Print/Ekspor
+            </button>
+        </div>
+        
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Tabel Pengguna</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Nama User</th>
+                                <th class="text-center">Hak Akses</th>
+                                <th class="text-center">Tanggal Dibuat</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($daftarPengguna as $pengguna)
+                                <tr>
+                                    <td class="text-center">{{ $pengguna->user_id }}</td>
+                                    <td>{{ $pengguna->user_nama }}</td>
+                                    <td class="text-center">{{ $pengguna->user_hak }}</td>
+                                    <td class="text-center">{{ $pengguna->created_at }}</td>
+                                    <td class="text-center">{{ $pengguna->user_sts ? 'Aktif' : 'Nonaktif' }}</td>
+                                    <td class="text-center" style="width: 15%">
+                                        @if ($pengguna->user_sts)
+                                            <button class="btn btn-sm btn-danger"
+                                                onclick="confirmDeactivation({{ $pengguna->user_id }}, 'nonaktifkan')">
+                                                Nonaktifkan
+                                            </button>
+                                        @else
+                                            <button class="btn btn-sm btn-success"
+                                                onclick="confirmDeactivation({{ $pengguna->user_id }}, 'aktifkan')">
+                                                Aktifkan
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- DataTables Scripts -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/Indonesian.json"
+                }
+            });
+        });
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))

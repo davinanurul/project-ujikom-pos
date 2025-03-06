@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('supplier_id')->constrained('supplier')->onDelete('cascade');
             $table->string('kode')->unique();
             $table->string('nama');
-            $table->decimal('keuntungan', 5, 2);
+            $table->decimal('harga_jual', 10, 2);
             $table->timestamps();
         });
     }

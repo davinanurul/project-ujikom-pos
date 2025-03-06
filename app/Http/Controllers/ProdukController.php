@@ -11,7 +11,8 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        return view('produk.index');
+        $produks = Produk::all();
+        return view('produk.index', compact('produks'));
     }
 
     public function create()
@@ -41,5 +42,36 @@ class ProdukController extends Controller
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
+    }
+
+    public function edit($id)
+    {
+        $produk = Produk::findOrFail($id);
+        $categories = Kategori::all();
+        $suppliers = Supplier::all();
+
+        return view('produk.edit', compact('produk', 'categories', 'suppliers'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'kategori_id' => 'required|exists:kategori,id',
+            'supplier_id' => 'required|exists:supplier,id',
+            'kode' => 'required|string|max:50|unique:produk,kode,' . $id,
+            'nama' => 'required|string|max:255',
+            'harga_jual' => 'required|numeric|min:0',
+        ]);
+
+        $produk = Produk::findOrFail($id);
+        $produk->update([
+            'nama' => $request->nama,
+            'kategori_id' => $request->kategori_id,
+            'supplier_id' => $request->supplier_id,
+            'kode' => $request->kode,
+            'harga_jual' => $request->harga_jual,
+        ]);
+
+        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
 }

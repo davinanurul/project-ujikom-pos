@@ -1,48 +1,49 @@
 @extends('layouts.layout')
-@section('title', 'Kategori Barang')
+@section('title', 'Kategori Produk')
 @section('content')
-    <div role="main">
-        <div class="">
-            <div class="row">
-                <div class="col-md-12 col-sm-12">
-                    <div class="x_panel">
-                        <div class="x_title d-flex justify-content-between">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addKategoriModal">
-                                <i class="fa fa-plus"></i> Tambah Kategori
-                            </button>
-                            <button class="btn btn-success" onclick="window.print();">
-                                <i class="fa fa-print"></i> Print/Ekspor
-                            </button>
-                        </div>
-                        <div class="x_content">
-                            <table class="table table-striped jambo_table bulk_action" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="font-size: 17px;">Nama Kategori</th>
-                                        <th class="text-center" style="font-size: 17px;">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($kategoris as $kategori)
-                                        <tr>
-                                            <td class="text-center">{{ $kategori->nama_kategori }}</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-warning btn edit-btn" data-id="{{ $kategori->id_kategori }}"
-                                                    data-nama="{{ $kategori->nama_kategori }}" data-toggle="modal"
-                                                    data-target="#editKategoriModal">
-                                                    <i class="fa fa-edit"></i> Edit
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="2" class="text-center">Tidak ada data.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mb-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addKategoriModal">
+                <i class="fas fa-plus"></i> Tambah Kategori
+            </button>
+            <button class="btn btn-success" onclick="window.print();">
+                <i class="fas fa-print"></i> Print/Ekspor
+            </button>
+        </div>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Tabel Kategori</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Nama Kategori</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($kategoris as $kategori)
+                                <tr>
+                                    <td class="text-center">{{ $kategori->nama_kategori }}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-warning edit-btn"
+                                            data-id="{{ $kategori->id_kategori }}"
+                                            data-nama="{{ $kategori->nama_kategori }}" data-toggle="modal"
+                                            data-target="#editKategoriModal">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-center">Tidak ada data.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -71,7 +72,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal Edit Kategori -->
     <div class="modal fade" id="editKategoriModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -98,46 +98,14 @@
         </div>
     </div>
 
-    <!-- Modal Hapus Kategori -->
-    <div class="modal fade" id="deleteKategoriModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Hapus</h5>
-                </div>
-                <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus kategori ini?</p>
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" action="#" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" id="delete_id" name="id">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 const nama = this.getAttribute('data-nama');
-
                 document.getElementById('edit_id').value = id;
                 document.getElementById('edit_nama_kategori').value = nama;
                 document.getElementById('editForm').action = `/kategori/${id}`;
-            });
-        });
-
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                document.getElementById('delete_id').value = id;
-                document.getElementById('deleteForm').action = `/kategori/${id}`;
             });
         });
 
@@ -159,4 +127,14 @@
             @endif
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/Indonesian.json"
+                }
+            });
+        });
+    </script>
+
 @endsection

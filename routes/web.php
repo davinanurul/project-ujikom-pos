@@ -4,7 +4,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PenerimaanBarangController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ProdukVarianController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
@@ -50,8 +52,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::put('produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
 
+    // Route Produk Varian
+    Route::get('produk_varian', [ProdukVarianController::class, 'index'])->name('produk_varian.index');
+    Route::get('produk_varian/create', [ProdukVarianController::class, 'create'])->name('produk_varian.create');
+    Route::post('produk_varian/store', [ProdukVarianController::class, 'store'])->name('produk_varian.store');
+
+    // Route Penerimaan Barang
+    Route::get('penerimaan_barang', [PenerimaanBarangController::class, 'index'])->name('penerimaan_barang.index');
+    Route::get('penerimaan_barang/create', [PenerimaanBarangController::class, 'create'])->name('penerimaan_barang.create');
+    Route::get('/penerimaan-barang/get-produk/{supplierId}', [PenerimaanBarangController::class, 'getProdukBySupplier']);
+    Route::get('/penerimaan-barang/get-varian/{produkId}', [PenerimaanBarangController::class, 'getVarianByProduk']);
+    Route::post('/penerimaan-barang/store', [PenerimaanBarangController::class, 'store'])->name('penerimaan_barang.store');
+
     // Route Transaksi
     Route::get('transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
 });
 
 // Route untuk Login

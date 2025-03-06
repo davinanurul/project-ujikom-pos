@@ -7,7 +7,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Form Transaksi</h6>
         </div>
         <div class="card-body">
-            <form action="#" method="POST">
+            <form action="{{ route('transaksi.store')}}" method="POST">
                 @csrf
 
                 <!-- Tabel Produk -->

@@ -10,7 +10,7 @@ class Produk extends Model
     use HasFactory;
 
     protected $table = 'produk';
-    protected $fillable = ['user_id','kategori_id','supplier_id', 'kode', 'nama', 'stok', 'harga_jual'];
+    protected $fillable = ['user_id','kategori_id','supplier_id', 'kode', 'nama'];
 
     public function kategori()
     {
@@ -22,8 +22,8 @@ class Produk extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function batch()
+    public function produk_varian()
     {
-        return $this->hasMany(Batch::class);
+        return $this->hasMany(ProdukVarian::class);
     }
 }

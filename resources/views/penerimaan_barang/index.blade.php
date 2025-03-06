@@ -1,10 +1,10 @@
 @extends('layouts.layout')
-@section('title', 'Produk')
+@section('title', 'Penerimaan Barang')
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb-3">
-            <a href="{{ route('produk.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah Produk
+            <a href="{{ route('penerimaan_barang.create')}}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah Data
             </a>
             <button class="btn btn-success" onclick="window.print();">
                 <i class="fas fa-print"></i> Print/Ekspor
@@ -13,37 +13,36 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Tabel Produk</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Tabel data Penerimaan Barang</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center">Supplier</th>
-                                <th class="text-center">Kategori</th>
-                                <th class="text-center">Kode</th>
-                                <th class="text-center">Nama</th>
+                                <th class="text-center">Nama Supplier</th>
+                                <th class="text-center">Produk</th>
+                                <th class="text-center">Size</th>
+                                <th class="text-center">Warna</th>
+                                <th class="text-center">Harga</th>
+                                <th class="text-center">Qty</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($produks as $produk)
+                            @forelse ($restoks as $restok)
                                 <tr>
-                                    <td class="text-center">{{ $produk->supplier->nama }}</td>
-                                    <td class="text-center">{{ $produk->kategori->nama_kategori }}</td>
-                                    <td class="text-center">{{ $produk->kode }}</td>
-                                    <td class="text-center">{{ $produk->nama }}</td>
-                                    <td class="text-center" style="width: 20%">
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <a href="{{ route('produk_varian.index')}}" class="btn btn-primary">
-                                                <i class="fa fa-eye"></i> Detail
-                                            </a>                                      
-                                            <a href="{{ route('produk.edit', ['id' => $produk->id]) }}" class="btn btn-warning">
-                                                <i class="fa fa-edit"></i> Edit
-                                            </a>
-                                        </div>
-                                    </td>                                    
+                                    <td class="text-center">{{ $restok->supplier->nama }}</td>
+                                    <td class="text-center">{{ $restok->produk->nama }}</td>
+                                    <td class="text-center">{{ $restok->varian->size }}</td>
+                                    <td class="text-center">{{ $restok->varian->warna }}</td>
+                                    <td class="text-center">{{ $restok->harga_beli }}</td>
+                                    <td class="text-center">{{ $restok->qty }}</td>
+                                    <td class="text-center" style="width: 12%">
+                                        <a href="#" class="btn btn-warning">
+                                            <i class="fa fa-eye"></i> Detail
+                                        </a>                                        
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>

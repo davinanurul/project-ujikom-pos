@@ -67,6 +67,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('kategori.index') }}">Kategori</a>
                         <a class="collapse-item" href="{{ route('produk.index') }}">Produk</a>
+                        <a class="collapse-item" href="{{ route('produk_varian.index') }}">Varian Produk</a>
                     </div>
                 </div>
             </li>
@@ -111,8 +112,9 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('user.index') }}">User</a>
-                        <a class="collapse-item" href="{{ route('supplier.index') }}">Supplier</a>
                         <a class="collapse-item" href="{{ route('member.index') }}">Member</a>
+                        <a class="collapse-item" href="{{ route('supplier.index') }}">Supplier</a>
+                        <a class="collapse-item" href="{{ route('penerimaan_barang.index') }}">Penerimaan Barang</a>
                     </div>
                 </div>
             </li>

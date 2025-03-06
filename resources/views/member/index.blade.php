@@ -31,7 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($members as $member)
+                            @forelse ($members as $member)
                                 <tr>
                                     <td class="text-center">{{ $member->id }}</td>
                                     <td class="text-center">{{ $member->nama }}</td>
@@ -55,7 +55,11 @@
                                         @endif
                                     </td>                                    
                                 </tr>
-                            @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">Tidak ada data.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

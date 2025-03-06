@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produk', function (Blueprint $table) {
+        Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
+            $table->string('nomor_transaksi')->unique();
+            $table->date('tanggal')->default(now());
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
-            $table->foreignId('kategori_id')->constrained('kategori')->onDelete('cascade');
-            $table->foreignId('supplier_id')->constrained('supplier')->onDelete('cascade');
-            $table->string('kode')->unique();
-            $table->string('nama');
+            $table->foreignId('member_id')->nullable()->constrained('member')->onDelete('set null');
+            $table->decimal('total', 10, 2);
+            $table->enum('pembayaran', ['TUNAI', 'DEBIT', 'QRIS']);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produk');
+        Schema::dropIfExists('transaksi');
     }
 };

@@ -10,11 +10,16 @@ class Produk extends Model
     use HasFactory;
 
     protected $table = 'produk';
-    protected $fillable = ['user_id','kategori_id','supplier_id', 'kode', 'nama', 'harga_jual'];
+    protected $fillable = ['user_id','kategori_id','supplier_id', 'kode', 'nama', 'stok', 'harga_jual'];
 
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
     public function batch()

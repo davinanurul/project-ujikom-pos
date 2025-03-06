@@ -51,6 +51,12 @@
                     </div>
 
                     <div class="form-group mt-0">
+                        <label for="stok">Stok</label>
+                        <input type="text" name="stok" id="stok" class="form-control" 
+                            value="{{ old('stok', $produk->stok) }}" required>
+                    </div>
+
+                    <div class="form-group mt-0">
                         <label for="keuntungan">Harga Jual</label>
                         <input type="number" name="harga_jual" id="harga_jual" class="form-control" 
                             value="{{ old('harga_jual', $produk->harga_jual) }}" required step="0.01">

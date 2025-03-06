@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->string('nama');
             $table->decimal('harga_jual', 10, 2);
+            $table->integer('stok');
             $table->timestamps();
         });
     }

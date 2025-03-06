@@ -29,7 +29,8 @@ class ProdukController extends Controller
             'supplier_id' => 'required|exists:supplier,id',
             'kode' => 'required|string|max:50|unique:produk,kode',
             'nama' => 'required|string|max:255',
-            'keuntungan' => 'required|numeric|min:0',
+            'harga_jual' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
         ]);
 
         $produk = Produk::create([
@@ -37,12 +38,14 @@ class ProdukController extends Controller
             'kategori_id' => $request->kategori_id,
             'supplier_id' => $request->supplier_id,
             'kode' => $request->kode,
-            'keuntungan' => $request->keuntungan,
+            'harga_jual' => $request->harga_jual,
+            'stok' => $request->stok,
             'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
+
 
     public function edit($id)
     {
@@ -61,6 +64,7 @@ class ProdukController extends Controller
             'kode' => 'required|string|max:50|unique:produk,kode,' . $id,
             'nama' => 'required|string|max:255',
             'harga_jual' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
         ]);
 
         $produk = Produk::findOrFail($id);
@@ -70,6 +74,7 @@ class ProdukController extends Controller
             'supplier_id' => $request->supplier_id,
             'kode' => $request->kode,
             'harga_jual' => $request->harga_jual,
+            'stok' => $request->stok,
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');

@@ -3,8 +3,10 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/nonaktifkan-akun/{userId}', [UserController::class, 'nonaktifkanAkun'])->name('user.nonaktifkan');
     Route::get('/aktifkan-akun/{userId}', [UserController::class, 'aktifkanAkun'])->name('user.aktifkan');
 
+    // Route Member
+    Route::get('member', [MemberController::class, 'index'])->name('member.index');
+    Route::get('member/create', [MemberController::class, 'create'])->name('member.create');
+    Route::post('member', [MemberController::class, 'store'])->name('member.store');
+    Route::get('/member/{id}/edit', [MemberController::class, 'edit'])->name('member.edit');
+    Route::put('/member/{id}', [MemberController::class, 'update'])->name('member.update');
+    Route::get('/nonaktifkan-member/{memberId}', [MemberController::class, 'nonaktifkanAkun'])->name('member.nonaktifkan');
+    Route::get('/aktifkan-member/{memberId}', [MemberController::class, 'aktifkanAkun'])->name('member.aktifkan');
+
+
     // Route Kategori
     Route::get('kategori', [KategoriController::class, 'index'])->name('kategori.index');
     Route::post('kategori', [KategoriController::class, 'store'])->name('kategori.store');
@@ -26,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route Supplier
     Route::get('supplier', [SupplierController::class, 'index'])->name('supplier.index');
-    Route::get('supplier/create', [SupplierController::class,'create'])->name('supplier.create');
+    Route::get('supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
     Route::post('supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
     Route::get('supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
     Route::put('/supplier/{id}', [SupplierController::class, 'update'])->name('supplier.update');
@@ -38,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::put('produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
 
+    // Route Transaksi
+    Route::get('transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
 });
 
 // Route untuk Login

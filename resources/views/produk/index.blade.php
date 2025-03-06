@@ -20,9 +20,11 @@
                     <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th class="text-center">Supplier</th>
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
+                                <th class="text-center">Stok</th>
                                 <th class="text-center">Harga Jual</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -30,9 +32,11 @@
                         <tbody>
                             @forelse ($produks as $produk)
                                 <tr>
+                                    <td class="text-center">{{ $produk->supplier->nama }}</td>
                                     <td class="text-center">{{ $produk->kategori->nama_kategori }}</td>
                                     <td class="text-center">{{ $produk->kode }}</td>
                                     <td class="text-center">{{ $produk->nama }}</td>
+                                    <td class="text-center">{{ $produk->stok }}</td>
                                     <td class="text-center">{{ $produk->harga_jual }}</td>
                                     <td class="text-center" style="width: 12%">
                                         <a href="{{ route('produk.edit', ['id' => $produk->id]) }}" class="btn btn-warning">

@@ -56,11 +56,6 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
@@ -80,13 +75,12 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-shopping-cart"></i> <!-- Ganti dengan ikon keranjang -->
+                    <i class="fas fa-shopping-cart"></i>
                     <span>TRANSAKSI</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Pembelian</a>
-                        <a class="collapse-item" href="utilities-color.html">Pengembalian</a>
+                        <a class="collapse-item" href="{{ route('transaksi.create')}}">Penjualan</a>
                     </div>
                 </div>
             </li>
@@ -95,18 +89,33 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-cog"></i> <!-- Ganti dengan ikon pengaturan / referensi -->
-                    <span>REFERENSI</span>
+                    <i class="fas fa-file"></i>
+                    <span>LAPORAN</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('user.index') }}">User</a>
-                        <a class="collapse-item" href="{{ route('supplier.index') }}">Supplier</a>
+                        <a class="collapse-item" href="#">Laporan Penjualan</a>
                     </div>
                 </div>
             </li>
 
+            <!-- Nav Item - Reference Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseThree">
+                    <i class="fas fa-cog"></i>
+                    <span>REFERENSI</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('user.index') }}">User</a>
+                        <a class="collapse-item" href="{{ route('supplier.index') }}">Supplier</a>
+                        <a class="collapse-item" href="{{ route('member.index') }}">Member</a>
+                    </div>
+                </div>
+            </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline mt-5">

@@ -98,52 +98,46 @@
 
     <script>
         document.addEventListener("change", function(event) {
-            let row = event.target.closest("tr"); // Cari baris yang sesuai
+            let row = event.target.closest("tr");
             if (!row) return;
 
             let produkDropdown = row.querySelector(".produk-select");
             let warnaDropdown = row.querySelector(".warna-select");
             let sizeDropdown = row.querySelector(".size-select");
 
-            // Jika produk dipilih, ambil daftar warna
+            // Jika produk dipilih, ambil daftar warna dengan stok lebih dari 0
             if (event.target.classList.contains("produk-select")) {
                 let produkId = produkDropdown.value;
 
-                // Kosongkan dropdown warna dan size
                 warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
                 sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
 
                 fetch(`/get-varians/${produkId}`)
                     .then(response => response.json())
                     .then(data => {
-                        let warnaSet = new Set();
-                        data.warna.forEach(varian => {
-                            if (!warnaSet.has(varian.warna)) {
-                                warnaSet.add(varian.warna);
-                                let option = document.createElement("option");
-                                option.value = varian.warna;
-                                option.textContent = varian.warna;
-                                warnaDropdown.appendChild(option);
-                            }
+                        data.warna.forEach(item => {
+                            let option = document.createElement("option");
+                            option.value = item.warna;
+                            option.textContent = item.warna;
+                            warnaDropdown.appendChild(option);
                         });
                     });
             }
 
-            // Jika warna dipilih, ambil daftar size yang sesuai
+            // Jika warna dipilih, ambil daftar size yang memiliki stok lebih dari 0
             if (event.target.classList.contains("warna-select")) {
                 let produkId = produkDropdown.value;
                 let warna = warnaDropdown.value;
 
-                // Kosongkan dropdown size
                 sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
 
                 fetch(`/get-sizes/${produkId}/${warna}`)
                     .then(response => response.json())
                     .then(data => {
-                        data.sizes.forEach(varian => {
+                        data.sizes.forEach(item => {
                             let option = document.createElement("option");
-                            option.value = varian.size;
-                            option.textContent = varian.size;
+                            option.value = item.size;
+                            option.textContent = item.size;
                             sizeDropdown.appendChild(option);
                         });
                     });

@@ -72,6 +72,7 @@ class TransaksiController extends Controller
     public function getVariansByProduk($produkId)
     {
         $warnaList = ProdukVarian::where('id_produk', $produkId)
+            ->where('stok', '>', 0)
             ->select('warna')
             ->distinct()
             ->get();
@@ -83,6 +84,7 @@ class TransaksiController extends Controller
     {
         $sizeList = ProdukVarian::where('id_produk', $produkId)
             ->where('warna', $warna)
+            ->where('stok', '>', 0)
             ->select('size')
             ->distinct()
             ->get();
@@ -90,12 +92,12 @@ class TransaksiController extends Controller
         return response()->json(['sizes' => $sizeList]);
     }
 
-
     public function getHarga($produkId, $warna, $size)
     {
         $varian = ProdukVarian::where('id_produk', $produkId)
             ->where('warna', $warna)
             ->where('size', $size)
+            ->where('stok', '>', 0)
             ->first();
 
         return response()->json(['harga' => $varian ? $varian->harga_jual : 0]);

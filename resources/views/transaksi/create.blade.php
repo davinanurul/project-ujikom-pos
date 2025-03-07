@@ -7,21 +7,39 @@
                 <h6 class="m-0 font-weight-bold text-primary">Form Transaksi</h6>
             </div>
             <div class="card-body">
+                <div class="table table-borderless">
+                    <table>
+                        <tr>
+                            <td>Taggal</td>
+                            <td>:</td>
+                            <td><span
+                                    class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kasir</td>
+                            <td>:</td>
+                            <td><span
+                                    class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
                 <form action="{{ route('transaksi.store') }}" method="POST">
                     @csrf
-
-                    <!-- Tabel Produk -->
                     <div class="table-responsive">
                         <table class="table table-bordered" id="produkTable">
-                            <thead class="thead-light">
+                            <thead class="thead-light text-center">
                                 <tr>
-                                    <th class="text-center">Produk</th>
-                                    <th class="text-center">Warna</th>
-                                    <th class="text-center">Size</th>
-                                    <th class="text-center">Harga</th>
-                                    <th class="text-center">Jumlah</th>
-                                    <th class="text-center">Total</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th style="width: 20%">Produk</th>
+                                    <th style="width: 15%">Warna</th>
+                                    <th style="width: 10%">Size</th>
+                                    <th>Harga</th>
+                                    <th style="width: 10%">Jumlah</th>
+                                    <th>Total</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,21 +52,20 @@
                                             @endforeach
                                         </select>
                                     </td>
-
                                     <td>
                                         <select class="form-control warna-select" required>
-                                            <option value="" disabled selected>Warna</option>
+                                            <option value="" disabled selected>-</option>
                                         </select>
                                     </td>
-
                                     <td>
                                         <select class="form-control size-select" required>
-                                            <option value="" disabled selected>Ukuran</option>
+                                            <option value="" disabled selected>-</option>
                                         </select>
                                     </td>
                                     <td><input type="text" class="form-control harga_jual" readonly></td>
-                                    <td><input type="number" name="quantity[]" class="form-control quantity" min="1"
-                                            value="1" oninput="calculateTotal(this)" required></td>
+                                    <td><input type="number" name="quantity[]" class="form-control quantity text-center"
+                                            style="width: 70px;" min="1" value="1"
+                                            oninput="calculateTotal(this)" required></td>
                                     <td><input type="text" class="form-control total" readonly></td>
                                     <td><button type="button" class="btn btn-danger btn-sm remove-row"
                                             onclick="removeRow(this)">Hapus</button></td>
@@ -57,17 +74,14 @@
                         </table>
                     </div>
 
-                    <!-- Tombol Tambah Produk -->
                     <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah
                         Produk</button>
 
-                    <!-- Total Keseluruhan -->
                     <div class="form-group">
                         <label>Total Keseluruhan</label>
                         <input type="text" id="grand_total" class="form-control bg-light" readonly>
                     </div>
 
-                    <!-- Metode Pembayaran -->
                     <div class="form-group">
                         <label for="payment_method">Metode Pembayaran</label>
                         <select id="payment_method" name="payment_method" class="form-control" required>
@@ -96,8 +110,8 @@
                 let produkId = produkDropdown.value;
 
                 // Kosongkan dropdown warna dan size
-                warnaDropdown.innerHTML = '<option value="" disabled selected>Warna</option>';
-                sizeDropdown.innerHTML = '<option value="" disabled selected>Ukuran</option>';
+                warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
 
                 fetch(`/get-varians/${produkId}`)
                     .then(response => response.json())
@@ -121,7 +135,7 @@
                 let warna = warnaDropdown.value;
 
                 // Kosongkan dropdown size
-                sizeDropdown.innerHTML = '<option value="" disabled selected>Ukuran</option>';
+                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
 
                 fetch(`/get-sizes/${produkId}/${warna}`)
                     .then(response => response.json())
@@ -150,7 +164,8 @@
                     fetch(`/get-harga/${produkId}/${warna}/${size}`)
                         .then(response => response.json())
                         .then(data => {
-                            hargaInput.value = "Rp" + parseInt(data.harga).toLocaleString();
+                            let harga = parseInt(data.harga) || 0;
+                            hargaInput.value = formatRupiah(harga);
                             calculateTotal(row.querySelector(".quantity"));
                         });
                 }
@@ -159,21 +174,30 @@
 
         function calculateTotal(input) {
             let row = input.closest("tr");
-            let harga_jual = parseInt(row.querySelector(".produk-select").selectedOptions[0].getAttribute(
-                "data-harga_jual")) || 0;
+            let hargaInput = row.querySelector(".harga_jual").value.replace(/\D/g, ""); // Hanya ambil angka
+            let harga = parseInt(hargaInput) || 0;
             let quantity = parseInt(row.querySelector(".quantity").value) || 1;
-            let total = harga_jual * quantity;
-            row.querySelector(".total").value = "Rp" + total.toLocaleString();
+            let total = harga * quantity;
+
+            row.querySelector(".total").value = formatRupiah(total);
             calculateGrandTotal();
         }
 
         function calculateGrandTotal() {
             let totalFields = document.querySelectorAll(".total");
             let grandTotal = 0;
+
             totalFields.forEach(field => {
-                grandTotal += parseInt(field.value.replace(/\D/g, "")) || 0;
+                let totalValue = field.value.replace(/\D/g, ""); // Ambil hanya angka
+                grandTotal += parseInt(totalValue) || 0;
             });
-            document.getElementById("grand_total").value = "Rp" + grandTotal.toLocaleString();
+
+            document.getElementById("grand_total").value = formatRupiah(grandTotal);
+        }
+
+        // Fungsi untuk format Rupiah
+        function formatRupiah(angka) {
+            return "Rp. " + angka.toLocaleString("id-ID");
         }
 
         function addprodukRow() {
@@ -190,12 +214,12 @@
             </td>
             <td>
                 <select class="form-control warna-select" id="warnaDropdown" required>
-                    <option value="" disabled selected>Warna</option>
+                    <option value="" disabled selected>-</option>
                 </select>
             </td>
             <td>
                 <select class="form-control size-select" id="sizeDropdown" required>
-                    <option value="" disabled selected>Ukuran</option>
+                    <option value="" disabled selected>-</option>
                 </select>
             </td>
             <td><input type="text" class="form-control harga_jual" readonly></td>

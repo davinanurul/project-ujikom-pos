@@ -67,6 +67,9 @@ Route::middleware(['auth'])->group(function () {
     // Route Transaksi
     Route::get('transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/get-varians/{produkId}', [TransaksiController::class, 'getVariansByProduk']);
+    Route::get('/get-sizes/{produkId}/{warna}', [TransaksiController::class, 'getSizesByWarna']);
+    Route::get('/get-harga/{produkId}/{warna}/{size}', [TransaksiController::class, 'getHarga']);
 });
 
 // Route untuk Login

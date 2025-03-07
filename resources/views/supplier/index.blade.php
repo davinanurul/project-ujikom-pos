@@ -53,6 +53,8 @@
         </div>
     </div>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if (session('success'))
@@ -67,7 +69,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
-                    text: {!! json_encode(session('error')) !!}
+                    text: {!! json_encode(session('error')) !!}c
                 });
             @endif
         });

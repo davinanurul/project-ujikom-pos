@@ -10,7 +10,7 @@ class PenerimaanBarang extends Model
     use HasFactory;
 
     protected $table = 'penerimaan_barang';
-    protected $fillable = ['id_supplier', 'id_produk', 'id_varian', 'qty', 'harga_beli'];
+    protected $fillable = ['id_supplier', 'id_produk', 'id_varian', 'qty', 'harga_beli', 'user_id'];
 
     public function supplier()
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailTransaksi;
 use App\Models\Produk;
+use App\Models\ProdukVarian;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,11 @@ class TransaksiController extends Controller
 {
     public function create()
     {
-        $produks = Produk::all();
-        return view('transaksi.create', compact('produks'));
+        $produks = Produk::whereHas('produk_varian', function ($query) {
+            $query->where('stok', '>', 0);
+        })->get();
+        $produkVarians = ProdukVarian::all();
+        return view('transaksi.create', compact('produks', 'produkVarians'));
     }
 
     public function store(Request $request)
@@ -63,5 +67,37 @@ class TransaksiController extends Controller
         $transaksi->update(['total_amount' => $totalKeseluruhan]);
 
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan.');
+    }
+
+    public function getVariansByProduk($produkId)
+    {
+        $warnaList = ProdukVarian::where('id_produk', $produkId)
+            ->select('warna')
+            ->distinct()
+            ->get();
+
+        return response()->json(['warna' => $warnaList]);
+    }
+
+    public function getSizesByWarna($produkId, $warna)
+    {
+        $sizeList = ProdukVarian::where('id_produk', $produkId)
+            ->where('warna', $warna)
+            ->select('size')
+            ->distinct()
+            ->get();
+
+        return response()->json(['sizes' => $sizeList]);
+    }
+
+
+    public function getHarga($produkId, $warna, $size)
+    {
+        $varian = ProdukVarian::where('id_produk', $produkId)
+            ->where('warna', $warna)
+            ->where('size', $size)
+            ->first();
+
+        return response()->json(['harga' => $varian ? $varian->harga_jual : 0]);
     }
 }

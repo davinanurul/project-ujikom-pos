@@ -23,50 +23,40 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'produk_id' => 'required|array',
-            'produk_id.*' => 'required|exists:products,id',
-            'quantity' => 'required|array',
-            'quantity.*' => 'required|integer|min:1',
-            'payment_method' => 'required|string|in:cash,card',
+        $request->validate([
+            'qty' => 'required|array',
+            'qty.*' => 'integer|min:1',
+            'harga' => 'required|array',
+            'harga.*' => 'numeric|min:0',
+            'total' => 'required|array',
+            'total.*' => 'numeric|min:0',
         ]);
 
-        // Generate transaksi ID
-        $transaksiId = Transaksi::generateTransaksiId();
+        dd($request->all());
 
-        // Simpan data transaksi ke tabel `tm_transaksi`
-        $transaksi = Transaksi::create([
-            'transaksi_id' => $transaksiId,
-            'user_id' => Auth::id(),
-            'payment_method' => $validated['payment_method'],
-            'total_amount' => 0, // Akan diperbarui nanti
-            'created_at' => now(),
-        ]);
+        DB::beginTransaction();
+        try {
+            $transaksi = new Transaksi();
+            $transaksi->tanggal = now();
+            $transaksi->user_id = Auth::id();
+            $transaksi->total = array_sum($request->total);
+            $transaksi->save();
 
-        $totalKeseluruhan = 0;
+            foreach ($request->id_produk as $key => $id_produk) {
+                DetailTransaksi::create([
+                    'transaksi_id' => $transaksi->id,
+                    'qty' => $request->qty[$key],
+                    'harga' => preg_replace('/\D/', '', $request->harga[$key]),
+                    'subtotal' => preg_replace('/\D/', '', $request->subtotal[$key]),
+                ]);
+            }
 
-        // Simpan detail transaksi ke tabel `td_transaksi`
-        foreach ($validated['produk_id'] as $index => $produkId) {
-            $produk = Produk::find($produkId);
-            $quantity = $validated['quantity'][$index];
-            $totalHarga = $produk->harga_jual * $quantity;
-
-            DetailTransaksi::create([
-                'transaksi_id' => $transaksi->transaksi_id,
-                'produk_id' => $produkId,
-                'harga_jual' => $produk->harga_jual,
-                'quantity' => $quantity,
-                'total_harga' => $totalHarga,
-                'created_at' => now(),
-            ]);
-
-            $totalKeseluruhan += $totalHarga;
+            DB::commit();
+            return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        // Update total_amount pada transaksi
-        $transaksi->update(['total_amount' => $totalKeseluruhan]);
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan.');
     }
 
     public function getVariansByProduk($produkId)
@@ -92,6 +82,17 @@ class TransaksiController extends Controller
         return response()->json(['sizes' => $sizeList]);
     }
 
+    // public function getHarga($produkId, $warna, $size)
+    // {
+    //     $varian = ProdukVarian::where('id_produk', $produkId)
+    //         ->where('warna', $warna)
+    //         ->where('size', $size)
+    //         ->where('stok', '>', 0)
+    //         ->first();
+
+    //     return response()->json(['harga' => $varian ? $varian->harga_jual : 0]);
+    // }
+
     public function getHarga($produkId, $warna, $size)
     {
         $varian = ProdukVarian::where('id_produk', $produkId)
@@ -100,6 +101,9 @@ class TransaksiController extends Controller
             ->where('stok', '>', 0)
             ->first();
 
-        return response()->json(['harga' => $varian ? $varian->harga_jual : 0]);
+        return response()->json([
+            'harga' => $varian ? $varian->harga_jual : 0,
+            'id_varian' => $varian ? $varian->id : null // Tambahkan id_varian ke response
+        ]);
     }
 }

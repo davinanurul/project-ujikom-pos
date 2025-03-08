@@ -23,9 +23,9 @@ class Produk extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function produk_varian()
+    public function varian()
     {
-        return $this->hasMany(ProdukVarian::class, 'id_produk');
+        return $this->hasMany(ProdukVarian::class, 'id_produk', 'id');
     }
 
     public static function generateKodeBarang()

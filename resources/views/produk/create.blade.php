@@ -28,10 +28,6 @@
                         </select>
                     </div>
                     <div class="form-group mt-0">
-                        <label for="kode">Kode</label>
-                        <input type="text" name="kode" id="kode" class="form-control" required>
-                    </div>
-                    <div class="form-group mt-0">
                         <label for="nama">Nama</label>
                         <input type="text" name="nama" id="nama" class="form-control" required>
                     </div>

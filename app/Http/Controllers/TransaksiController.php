@@ -2,61 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailTransaksi;
-use App\Models\Produk;
-use App\Models\ProdukVarian;
 use App\Models\Transaksi;
+use App\Models\Member;
+use App\Models\Produk;
+use App\Models\DetailTransaksi;
+use App\Models\ProdukVarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
     public function create()
     {
-        $produks = Produk::whereHas('produk_varian', function ($query) {
+        $produks = Produk::whereHas('varian', function ($query) {
             $query->where('stok', '>', 0);
         })->get();
-        $produkVarians = ProdukVarian::all();
-        return view('transaksi.create', compact('produks', 'produkVarians'));
+        $members = Member::all();
+        return view('transaksi.create', compact('produks', 'members'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'member_id' => 'nullable|exists:member,id',
+            'pembayaran' => 'required|in:TUNAI,DEBIT,QRIS',
+            'warna' => 'required|array',
+            'size' => 'required|array',
             'qty' => 'required|array',
             'qty.*' => 'integer|min:1',
             'harga' => 'required|array',
-            'harga.*' => 'numeric|min:0',
-            'total' => 'required|array',
-            'total.*' => 'numeric|min:0',
+            'subtotal' => 'required|array',
         ]);
 
-        dd($request->all());
+        $nomor_transaksi = Transaksi::generateNomorTransaksi();
 
-        DB::beginTransaction();
-        try {
-            $transaksi = new Transaksi();
-            $transaksi->tanggal = now();
-            $transaksi->user_id = Auth::id();
-            $transaksi->total = array_sum($request->total);
-            $transaksi->save();
+        $transaksi = Transaksi::create([
+            'nomor_transaksi' => $nomor_transaksi,
+            'tanggal' => now(),
+            'member_id' => $request->member_id,
+            'pembayaran' => $request->pembayaran,
+            'total' => preg_replace('/[^\d]/', '', $request->total),
+            'user_id' => Auth::id(),
+        ]);
 
-            foreach ($request->id_produk as $key => $id_produk) {
-                DetailTransaksi::create([
-                    'transaksi_id' => $transaksi->id,
-                    'qty' => $request->qty[$key],
-                    'harga' => preg_replace('/\D/', '', $request->harga[$key]),
-                    'subtotal' => preg_replace('/\D/', '', $request->subtotal[$key]),
+        foreach ($request->produk_id as $index => $produk_id) {
+            $varian = ProdukVarian::where([
+                'id_produk' => $produk_id,
+                'warna' => $request->warna[$index],
+                'size' => $request->size[$index],
+            ])->first();
+
+            if ($varian) {
+                $transaksi->DetailTransaksi()->create([
+                    'produk_id' => $produk_id,
+                    'id_varian' => $varian->id,
+                    'qty' => $request->qty[$index],
+                    'harga' => preg_replace('/[^\d]/', '', $request->harga[$index]),
+                    'subtotal' => preg_replace('/[^\d]/', '', $request->subtotal[$index]),
                 ]);
-            }
 
-            DB::commit();
-            return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                // Kurangi stok
+                $varian->stok -= $request->qty[$index];
+                $varian->save();
+            }
         }
+
+        return redirect()->route('transaksi.create')->with('success', 'Transaksi berhasil ditambahkan');
     }
 
     public function getVariansByProduk($produkId)

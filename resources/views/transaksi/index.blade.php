@@ -7,48 +7,39 @@
                 <h6 class="m-0 font-weight-bold text-primary">Form Transaksi</h6>
             </div>
             <div class="card-body">
+                <div class="table table-borderless">
+                    <table>
+                        <tr>
+                            <td>Taggal</td>
+                            <td>:</td>
+                            <td><span
+                                    class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kasir</td>
+                            <td>:</td>
+                            <td><span
+                                    class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
                 <form action="{{ route('transaksi.store') }}" method="POST">
                     @csrf
-                    <div class="table table-borderless">
-                        <table style="width: 100%">
-                            <tr>
-                                <td style="width: 10%">Taggal</td>
-                                <td style="width: 5%">:</td>
-                                <td><span
-                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span>
-                                </td>
-                                <td style="width: 20%; text-align:end">Member (Opsional)</td>
-                                <td style="width: 5%">:</td>
-                                <td style="width: 20%">
-                                    <select class="form-control" id="member_id" name="member_id">
-                                        <option value="">Pilih Member</option>
-                                        @foreach ($members as $member)
-                                            <option value="{{ $member->id }}">{{ $member->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Kasir</td>
-                                <td>:</td>
-                                <td><span
-                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span>
-                                </td>
-
-                            </tr>
-                        </table>
-                    </div>
-
                     <div class="table-responsive">
                         <table class="table table-bordered" id="produkTable">
-                            <thead>
+                            <thead class="thead-light text-center">
                                 <tr>
                                     <th style="width: 20%">Produk</th>
                                     <th style="width: 15%">Warna</th>
                                     <th style="width: 10%">Size</th>
+                                    <th>Varian</th>
                                     <th>Harga</th>
-                                    <th style="width: 10%">Qty</th>
-                                    <th>Subtotal</th>
+                                    <th style="width: 10%">Jumlah</th>
+                                    <th>Total</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -62,6 +53,7 @@
                                             @endforeach
                                         </select>
                                     </td>
+
                                     <td>
                                         <select class="form-control warna-select" name="warna[]" required>
                                             <option value="" disabled selected>-</option>
@@ -72,10 +64,13 @@
                                             <option value="" disabled selected>-</option>
                                         </select>
                                     </td>
-                                    <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
+                                    <td>
+                                        <input type="text" class="form-control id_varian" name="id_varian[]" readonly>
+                                    </td>
                                     <td><input type="text" class="form-control harga_jual" name="harga[]" readonly></td>
-                                    <td><input type="number" name="qty[]" class="form-control quantity" min="1"
-                                            value="1" oninput="calculateTotal(this)" required></td>
+                                    <td><input type="number" name="qty[]" class="form-control quantity text-center"
+                                            style="width: 70px;" min="1" value="1"
+                                            oninput="calculateTotal(this)" required></td>
                                     <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
                                     <td><button type="button" class="btn btn-danger btn-sm remove-row"
                                             onclick="removeRow(this)">Hapus</button></td>
@@ -83,29 +78,29 @@
                             </tbody>
                         </table>
                     </div>
+
                     <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah
                         Produk</button>
 
                     <div class="form-group">
                         <label>Total Keseluruhan</label>
-                        <input type="text" id="grand_total" name="total" class="form-control bg-light" readonly>
+                        <input type="text" id="grand_total" name="total[]" class="form-control bg-light" readonly>
                     </div>
+
                     <div class="form-group">
-                        <label for="pembayaran" class="form-label">Metode Pembayaran</label>
-                        <select class="form-control" id="pembayaran" name="pembayaran" required>
-                            <option value="" disabled selected>-</option>
-                            <option value="TUNAI">TUNAI</option>
-                            <option value="DEBIT">DEBIT</option>
+                        <label for="payment_method">Metode Pembayaran</label>
+                        <select id="payment_method" name="pembayaran[]" class="form-control" required>
+                            <option value="TUNAI">Tunai</option>
+                            <option value="DEBIT">Kartu</option>
                             <option value="QRIS">QRIS</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-block">Simpan Transaksi</button>
                 </form>
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener("change", function(event) {
@@ -211,30 +206,30 @@
             let table = document.getElementById("produkTable").getElementsByTagName('tbody')[0];
             let newRow = table.insertRow();
             newRow.innerHTML = `
-        <td>
-            <select name="produk_id[]" class="form-control produk-select" id="produkDropdown" required>
-                <option value="" disabled selected>Pilih Produk</option>
-                    @foreach ($produks as $produk)
-                        <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
-                    @endforeach
-            </select>
-        </td>
-        <td>
-            <select name="warna[]" class="form-control warna-select" id="warnaDropdown" required>
-                <option value="" disabled selected>-</option>
-            </select>
-        </td>
-        <td>
-            <select name="size[]" class="form-control size-select" id="sizeDropdown" required>
-                <option value="" disabled selected>-</option>
-            </select>
-        </td>
-        <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
-        <td><input name="harga[]" type="text" class="form-control harga_jual" readonly></td>
-        <td><input name="qty[]" type="number" name="quantity[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
-        <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
-        <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
-    `;
+            <td>
+                <select name="produk_id[]" class="form-control produk-select" id="produkDropdown" required>
+                    <option value="" disabled selected>Pilih Produk</option>
+                        @foreach ($produks as $produk)
+                            <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
+                        @endforeach
+                </select>
+            </td>
+            <td>
+                <select name="warna[]" class="form-control warna-select" id="warnaDropdown" required>
+                    <option value="" disabled selected>-</option>
+                </select>
+            </td>
+            <td>
+                <select name="size[]" class="form-control size-select" id="sizeDropdown" required>
+                    <option value="" disabled selected>-</option>
+                </select>
+            </td>
+            <td><input type="text" class="form-control id_varian" name="id_varian[]" readonly></td>
+            <td><input name="harga[]" type="text" class="form-control harga_jual" readonly></td>
+            <td><input name="qty[]" type="number" name="quantity[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
+            <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
+            <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
+        `;
         }
 
         function removeRow(button) {
@@ -244,3 +239,22 @@
         }
     </script>
 @endsection
+
+<div class="mb-3">
+    <label for="member_id" class="form-label">Member (Opsional)</label>
+    <select class="form-control" id="member_id" name="member_id">
+        <option value="">-- Pilih Member --</option>
+        @foreach ($members as $member)
+            <option value="{{ $member->id }}">{{ $member->nama }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="pembayaran" class="form-label">Metode Pembayaran</label>
+    <select class="form-control" id="pembayaran" name="pembayaran" required>
+        <option value="TUNAI">TUNAI</option>
+        <option value="DEBIT">DEBIT</option>
+        <option value="QRIS">QRIS</option>
+    </select>
+</div>

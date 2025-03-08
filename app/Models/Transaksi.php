@@ -17,14 +17,16 @@ class Transaksi extends Model
         'tanggal',
         'user_id',
         'member_id',
-        'total',
-        'pembayaran',
-    ];
+        'total', 
+        'pembayaran'
+    ];    
 
+    // Relasi ke User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
+
     public function member()
     {
         return $this->belongsTo(Member::class, 'member_id', 'id');
@@ -35,18 +37,18 @@ class Transaksi extends Model
         return $this->hasMany(DetailTransaksi::class, 'id_transaksi', 'id');
     }
 
-    public static function generateNumberTransaksi()
+    public static function generateNomorTransaksi()
     {
         $date = now()->format('Ymd');
-        $latestNumber = DB::table('transactions')
+        $latestNumber = DB::table('transaksi')
             ->whereDate('created_at', now())
-            ->max('number_transaksi'); // Ambil nomor transaksi terakhir hari ini
+            ->max('nomor_transaksi');
 
         if ($latestNumber) {
-            $lastNumber = (int) substr($latestNumber, -4); // Ambil 4 digit terakhir
-            $nextNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT); // Tambah 1
+            $lastNumber = (int) substr($latestNumber, -4);
+            $nextNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
         } else {
-            $nextNumber = '0001'; // Jika belum ada transaksi hari ini, mulai dari 0001
+            $nextNumber = '0001';
         }
 
         return 'TRX-' . $date . '-' . $nextNumber;

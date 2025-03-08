@@ -18,4 +18,9 @@ class Member extends Model
         'tanggal_bergabung',
         'status',
     ];
+
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'member_id', 'id');
+    }
 }

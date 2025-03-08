@@ -154,9 +154,7 @@
                     });
             }
         });
-    </script>
 
-    <script>
         document.addEventListener("change", function(event) {
             if (event.target.classList.contains("warna-select") || event.target.classList.contains("size-select")) {
                 let row = event.target.closest("tr");
@@ -242,5 +240,23 @@
             row.remove();
             calculateGrandTotal();
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+             @if (session('success'))
+                 Swal.fire({
+                     icon: 'success',
+                     title: 'Berhasil',
+                     text: {!! json_encode(session('success')) !!}
+                 });
+             @endif
+ 
+             @if (session('error'))
+                 Swal.fire({
+                     icon: 'error',
+                     title: 'Gagal',
+                     text: {!! json_encode(session('error')) !!}
+                 });
+             @endif
+         });
     </script>
 @endsection

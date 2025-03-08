@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/penerimaan-barang/store', [PenerimaanBarangController::class, 'store'])->name('penerimaan_barang.store');
 
     // Route Transaksi
+    Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
     Route::get('/get-varians/{produkId}', [TransaksiController::class, 'getVariansByProduk']);

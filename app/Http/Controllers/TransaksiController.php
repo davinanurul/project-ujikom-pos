@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
+    public function index()
+    {
+        $daftarTransaksi = Transaksi::all();
+        return view('transaksi.index', compact('daftarTransaksi'));
+    }
+
     public function create()
     {
         $produks = Produk::whereHas('varian', function ($query) {
@@ -67,7 +73,7 @@ class TransaksiController extends Controller
             }
         }
 
-        return redirect()->route('transaksi.create')->with('success', 'Transaksi berhasil ditambahkan');
+        return redirect()->route('transaksi.create')->with('success', 'Transaksi berhasil dibuat');
     }
 
     public function getVariansByProduk($produkId)

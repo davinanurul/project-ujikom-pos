@@ -83,6 +83,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('transaksi.create')}}">Penjualan</a>
                         <a class="collapse-item" href="{{ route('penerimaan_barang.index') }}">Penerimaan Barang</a>
+                        <a class="collapse-item" href="{{ route('transaksi.index') }}">Daftar Transaksi</a>
                     </div>
                 </div>
             </li>

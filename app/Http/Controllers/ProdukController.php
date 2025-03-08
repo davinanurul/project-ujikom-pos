@@ -27,15 +27,14 @@ class ProdukController extends Controller
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
             'supplier_id' => 'required|exists:supplier,id',
-            'kode' => 'required|string|max:50|unique:produk,kode',
             'nama' => 'required|string|max:255',
         ]);
 
         $produk = Produk::create([
+            'kode' => Produk::generateKodeBarang(),
             'nama' => $request->nama,
             'kategori_id' => $request->kategori_id,
             'supplier_id' => $request->supplier_id,
-            'kode' => $request->kode,
             'user_id' => auth()->id(),
         ]);
 

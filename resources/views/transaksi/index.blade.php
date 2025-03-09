@@ -3,8 +3,8 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb-3">
-            <a href="{{ route('produk.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Baut Transaksi
+            <a href="{{ route('transaksi.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Buat Transaksi
             </a>
             <button class="btn btn-success" onclick="window.print();">
                 <i class="fas fa-print"></i> Print/Ekspor
@@ -21,7 +21,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th class="text-center">Nomor</th>
+                                <th class="text-center">Nomor Transaksi</th>
                                 <th class="text-center">Tanggal</th>
                                 <th class="text-center">Kasir</th>
                                 <th class="text-center">Total</th>
@@ -36,13 +36,13 @@
                                     <td class="text-center">{{ $transaksi->id }}</td>
                                     <td class="text-center">{{ $transaksi->nomor_transaksi }}</td>
                                     <td class="text-center">{{ $transaksi->tanggal }}</td>
-                                    <td class="text-center">{{ $transaksi->user_id }}</td>
-                                    <td class="text-center">{{ $transaksi->total }}</td>
+                                    <td class="text-center">{{ $transaksi->user->user_nama }}</td>
+                                    <td class="text-center">{{ number_format($transaksi->total) }}</td>
                                     <td class="text-center">{{ $transaksi->pembayaran }}</td>
                                     <td class="text-center">{{ $transaksi->member?->nama ?? '-' }}</td>
                                     <td class="text-center" style="width: 20%">
                                         <div>
-                                            <a href="#" class="btn btn-primary">
+                                            <a href="{{ route('transaksi.details', $transaksi->id)}}" class="btn btn-primary">
                                                 <i class="fa fa-eye"></i> Detail
                                             </a>
                                         </div>

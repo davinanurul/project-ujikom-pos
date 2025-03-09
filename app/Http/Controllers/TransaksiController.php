@@ -99,17 +99,6 @@ class TransaksiController extends Controller
         return response()->json(['sizes' => $sizeList]);
     }
 
-    // public function getHarga($produkId, $warna, $size)
-    // {
-    //     $varian = ProdukVarian::where('id_produk', $produkId)
-    //         ->where('warna', $warna)
-    //         ->where('size', $size)
-    //         ->where('stok', '>', 0)
-    //         ->first();
-
-    //     return response()->json(['harga' => $varian ? $varian->harga_jual : 0]);
-    // }
-
     public function getHarga($produkId, $warna, $size)
     {
         $varian = ProdukVarian::where('id_produk', $produkId)
@@ -123,4 +112,13 @@ class TransaksiController extends Controller
             'id_varian' => $varian ? $varian->id : null // Tambahkan id_varian ke response
         ]);
     }
+
+    public function details($id)
+{
+    $transaksi = Transaksi::findOrFail($id);
+    $detailTransaksi = $transaksi->detailTransaksi; // Ambil detail transaksi berdasarkan transaksi_id
+
+    return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
+}
+
 }

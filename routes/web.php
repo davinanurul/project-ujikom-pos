@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-sizes/{produkId}/{warna}', [TransaksiController::class, 'getSizesByWarna']);
     Route::get('/get-harga/{produkId}/{warna}/{size}', [TransaksiController::class, 'getHarga']);
     Route::get('/get-varian/{produk_id}/{warna}/{size}', [TransaksiController::class, 'getVarian']);
+    Route::get('/transaksi/{id}/details', [TransaksiController::class, 'details'])->name('transaksi.details');
 });
 
 // Route untuk Login

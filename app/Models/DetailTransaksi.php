@@ -27,7 +27,7 @@ class DetailTransaksi extends Model
 
     public function produk()
     {
-        return $this->hasMany(Produk::class, 'id_produk', 'id');
+        return $this->hasOneThrough(Produk::class, ProdukVarian::class, 'id', 'id', 'id_varian', 'id_produk');
     }
 
     public function varian()

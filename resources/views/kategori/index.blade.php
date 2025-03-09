@@ -30,7 +30,7 @@
                                     <td class="text-center">{{ $kategori->nama_kategori }}</td>
                                     <td class="text-center">
                                         <button class="btn btn-warning edit-btn"
-                                            data-id="{{ $kategori->id_kategori }}"
+                                            data-id="{{ $kategori->id }}"
                                             data-nama="{{ $kategori->nama_kategori }}" data-toggle="modal"
                                             data-target="#editKategoriModal">
                                             <i class="fas fa-edit"></i> Edit
@@ -79,7 +79,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Kategori</h5>
                 </div>
-                <form id="editForm" action="#" method="POST">
+                <form id="editForm" action="{{ route('kategori.update', $kategori->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">

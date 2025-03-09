@@ -26,16 +26,14 @@ class KategoriController extends Controller
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
 
-    public function update(Request $request, $id_kategori)
+    public function update(Request $request, $id)
     {
-        $kategori = Kategori::findOrFail($id_kategori);
+        $kategori = Kategori::findOrFail($id);
 
-        // Validasi input
         $validated = $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
 
-        // Update data kategori
         $kategori->update([
             'nama_kategori' => $validated['nama_kategori'],
         ]);

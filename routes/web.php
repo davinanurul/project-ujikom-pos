@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('produk/store', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::put('produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+    Route::get('/produk/{id}/details', [ProdukController::class, 'details'])->name('produk.details');
 
     // Route Produk Varian
     Route::get('produk_varian', [ProdukVarianController::class, 'index'])->name('produk_varian.index');

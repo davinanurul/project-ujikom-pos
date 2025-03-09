@@ -35,15 +35,15 @@
                                     <td class="text-center">{{ $produk->kode }}</td>
                                     <td class="text-center">{{ $produk->nama }}</td>
                                     <td class="text-center" style="width: 20%">
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <a href="{{ route('produk_varian.index')}}" class="btn btn-primary">
-                                                <i class="fa fa-eye"></i> Detail
-                                            </a>                                      
-                                            <a href="{{ route('produk.edit', ['id' => $produk->id]) }}" class="btn btn-warning">
-                                                <i class="fa fa-edit"></i> Edit
+                                        <div class="btn-group">
+                                            <a href="{{ route('produk.details', $produk->id) }}" class="btn btn-primary">
+                                                Detail
                                             </a>
-                                        </div>
-                                    </td>                                    
+                                            <a href="{{ route('produk.edit', ['id' => $produk->id]) }}" class="btn btn-warning">
+                                                Edit
+                                            </a>
+                                        </div>                                        
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -57,40 +57,40 @@
         </div>
     </div>
 
-     <!-- DataTables Scripts -->
-     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
-     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
-     <script>
-         $(document).ready(function() {
-             $('#datatable').DataTable({
-                 "language": {
-                     "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/Indonesian.json"
-                 }
-             });
-         });
-     </script>
- 
-     <!-- SweetAlert2 -->
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <script>
-         document.addEventListener("DOMContentLoaded", function() {
-             @if (session('success'))
-                 Swal.fire({
-                     icon: 'success',
-                     title: 'Berhasil',
-                     text: {!! json_encode(session('success')) !!}
-                 });
-             @endif
- 
-             @if (session('error'))
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Gagal',
-                     text: {!! json_encode(session('error')) !!}
-                 });
-             @endif
-         });
-     </script>
+    <!-- DataTables Scripts -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/Indonesian.json"
+                }
+            });
+        });
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: {!! json_encode(session('success')) !!}
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: {!! json_encode(session('error')) !!}
+                });
+            @endif
+        });
+    </script>
 @endsection

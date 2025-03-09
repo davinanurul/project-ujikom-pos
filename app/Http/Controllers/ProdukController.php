@@ -70,4 +70,12 @@ class ProdukController extends Controller
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
+
+    public function details($id)
+    {
+        $produk = Produk::findOrFail($id);
+        $produkVarians = $produk->varian;
+
+        return view('produk.details', compact('produk', 'produkVarians'));
+    }
 }

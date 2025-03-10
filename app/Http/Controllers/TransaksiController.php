@@ -7,17 +7,13 @@ use App\Models\Member;
 use App\Models\Produk;
 use App\Models\DetailTransaksi;
 use App\Models\ProdukVarian;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class TransaksiController extends Controller
 {
-    public function index()
-    {
-        $daftarTransaksi = Transaksi::all();
-        return view('transaksi.index', compact('daftarTransaksi'));
-    }
-
     public function create()
     {
         $produks = Produk::whereHas('varian', function ($query) {
@@ -114,11 +110,37 @@ class TransaksiController extends Controller
     }
 
     public function details($id)
-{
-    $transaksi = Transaksi::findOrFail($id);
-    $detailTransaksi = $transaksi->detailTransaksi; // Ambil detail transaksi berdasarkan transaksi_id
+    {
+        $transaksi = Transaksi::findOrFail($id);
+        $detailTransaksi = $transaksi->detailTransaksi; // Ambil detail transaksi berdasarkan transaksi_id
 
-    return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
-}
+        return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
+    }
 
+    public function laporanTransaksi(Request $request)
+    {
+        $query = Transaksi::query();
+
+        if ($request->ajax()) {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('tanggal', [$startDate, $endDate]);
+            }
+
+            return response()->json(['data' => $query->get()]);
+        }
+
+        $daftarTransaksi = $query->get();
+        return view('transaksi.laporan_transaksi', compact('daftarTransaksi'));
+    }
+
+    public function exportPDF()
+    {
+        $daftarTransaksi = Transaksi::all();
+        $pdf = Pdf::loadView('pdf.transaksi', compact('daftarTransaksi'));
+
+        return $pdf->stream('laporan-transaksi.pdf');
+    }
 }

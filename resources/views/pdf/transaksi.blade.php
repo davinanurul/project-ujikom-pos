@@ -59,7 +59,7 @@
                 {{-- @if ($filterApplied && $transactions->isEmpty())
                     <tr>
                         <td colspan="13" class="text-center">Tidak ada transaksi untuk periode yang dipilih.</td>
-                    </tr>
+                    </tr>d
                 @elseif(!$filterApplied)
                     <tr>
                         <td colspan="13" class="text-center">Silakan lakukan filter berdasarkan stuffing date.</td>

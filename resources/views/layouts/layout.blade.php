@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>POINT OF SALES</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{ asset('asset') }}/dist/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -24,10 +24,10 @@
     <link href="{{ asset('asset') }}/dist/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
 
-    <script src="{{ asset('asset') }}/dist/https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
-    <link rel="stylesheet" href="/DataTables/datatables.css" />
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <link rel="stylesheet" href="{{ asset('asset') }}/dist/vendor/DataTables/datatables.css" />
 
-    <script src="/DataTables/datatables.js"></script>
+    <script src="{{ asset('asset') }}/dist/vendor/DataTables/datatables.js"></script>
 
 </head>
 
@@ -98,7 +98,7 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('transaksi.index') }}">Daftar Transaksi</a>
+                        <a class="collapse-item" href="{{ route('laporan.transaksi') }}">Laporan Transaksi</a>
                     </div>
                 </div>
             </li>
@@ -309,8 +309,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->user_nama }}</span>
+                                <img class="{{ asset('asset') }}/dist/vendor/img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -397,14 +397,14 @@
     <script src="{{ asset('asset') }}/dist/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="{{ asset('asset') }}/dist/vendor/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
     <script src="{{ asset('asset') }}/dist/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="{{ asset('asset') }}/dist/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="{{ asset('asset') }}/dist/vendor/js/demo/datatables-demo.js"></script>
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
@@ -417,6 +417,8 @@
             });
         });
     </script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 

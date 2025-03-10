@@ -65,7 +65,7 @@
                                 </table>
 
                                 <div class="mt-4">
-                                    <a href="{{ route('transaksi.index') }}" class="btn btn-primary">Kembali</a>
+                                    <a href="{{ route('laporan.transaksi') }}" class="btn btn-primary">Kembali</a>
                                 </div>
                             </div>
                         </div>

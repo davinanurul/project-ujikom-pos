@@ -6,9 +6,7 @@
             <a href="{{ route('produk_varian.create')}}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Tambah Varian Produk
             </a>
-            <button class="btn btn-success" onclick="window.print();">
-                <i class="fas fa-print"></i> Print/Ekspor
-            </button>
+            <a href="{{ route('export_produk.pdf') }}" class="btn btn-success" target="_blank">Export PDF</a>
         </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">

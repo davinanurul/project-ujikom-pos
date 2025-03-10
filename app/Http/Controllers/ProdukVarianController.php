@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\ProdukVarian;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ProdukVarianController extends Controller
@@ -37,5 +38,17 @@ class ProdukVarianController extends Controller
         ]);
 
         return redirect()->route('produk_varian.index')->with('success', 'Varian produk berhasil ditambahkan.');
+    }
+
+    public function exportPDF()
+    {
+        $produkVarians = ProdukVarian::with(['detailTransaksi' => function ($query) {
+            $query->selectRaw('id_varian, SUM(qty) as total_terjual')
+                ->groupBy('id_varian');
+        }])->get();
+
+        $pdf = Pdf::loadView('pdf.produk', compact('produkVarians'));
+
+        return $pdf->stream('laporan-produk.pdf');
     }
 }

@@ -13,7 +13,7 @@
                     </div>
                 </div>
             </form>                     
-            <a href="{{ route('export.pdf') }}" class="btn btn-warning" target="_blank">Export PDF</a>
+            <a href="{{ route('export.pdf') }}" class="btn btn-success" target="_blank">Export PDF</a>
         </div>
 
         <!-- DataTales Example -->
@@ -47,7 +47,7 @@
                                     <td class="text-center">{{ $transaksi->pembayaran }}</td>
                                     <td class="text-center">{{ $transaksi->member?->nama ?? '-' }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('transaksi.details', $transaksi->id) }}" class="btn btn-primary">
+                                        <a href="{{ route('transaksi.details', $transaksi->id) }}" class="btn btn-warning">
                                             <i class="fa fa-eye"></i> Detail
                                         </a>
                                     </td>

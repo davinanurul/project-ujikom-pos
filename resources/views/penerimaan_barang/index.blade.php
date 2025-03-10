@@ -36,10 +36,10 @@
                                     <td class="text-center">{{ $restok->produk->nama }}</td>
                                     <td class="text-center">{{ $restok->varian->size }}</td>
                                     <td class="text-center">{{ $restok->varian->warna }}</td>
-                                    <td class="text-center">{{ $restok->harga_beli }}</td>
+                                    <td class="text-center">{{ number_format($restok->harga_beli) }}</td>
                                     <td class="text-center">{{ $restok->qty }}</td>
                                     <td class="text-center" style="width: 12%">
-                                        <a href="#" class="btn btn-warning">
+                                        <a href="{{route('penerimaan_barang.details', $restok->id)}}" class="btn btn-warning">
                                             <i class="fa fa-eye"></i> Detail
                                         </a>                                        
                                     </td>

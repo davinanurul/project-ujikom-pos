@@ -2,7 +2,7 @@
 @section('title', 'Tambah User')
 
 @section('content')
-    <div class="page-body">
+    <div class="container-fluid">
         <!-- Form Tambah Pengguna -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">

@@ -26,4 +26,9 @@ class PenerimaanBarang extends Model
     {
         return $this->belongsTo(ProdukVarian::class, 'id_varian');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -11,7 +11,11 @@ class ProdukVarianController extends Controller
 {
     public function index()
     {
-        $produkVarians = ProdukVarian::all();
+        $produkVarians = ProdukVarian::with(['detailTransaksi' => function ($query) {
+            $query->selectRaw('id_varian, SUM(qty) as total_terjual')
+                ->groupBy('id_varian');
+        }])->get();
+
         return view('produk_varian.index', compact('produkVarians'));
     }
 

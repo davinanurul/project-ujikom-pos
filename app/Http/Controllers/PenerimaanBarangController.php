@@ -58,4 +58,10 @@ class PenerimaanBarangController extends Controller
 
         return redirect()->route('penerimaan_barang.index')->with('success', 'Data Penerimaan Barang berhasil disimpan dan stok telah diperbarui!');
     }
+
+    public function details($id)
+    {
+        $penerimaan = PenerimaanBarang::findOrFail($id);
+        return view('penerimaan_barang.details', compact('penerimaan'));
+    }
 }

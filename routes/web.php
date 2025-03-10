@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/penerimaan-barang/get-produk/{supplierId}', [PenerimaanBarangController::class, 'getProdukBySupplier']);
     Route::get('/penerimaan-barang/get-varian/{produkId}', [PenerimaanBarangController::class, 'getVarianByProduk']);
     Route::post('/penerimaan-barang/store', [PenerimaanBarangController::class, 'store'])->name('penerimaan_barang.store');
+    Route::get('/penerimaan-barang/{id}/details', [PenerimaanBarangController::class, 'details'])->name('penerimaan_barang.details');
 
     // Route Transaksi
     Route::get('transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');

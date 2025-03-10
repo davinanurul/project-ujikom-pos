@@ -3,8 +3,8 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb-3">
-            <a href="{{ route('produk_varian.create')}}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah Varian Produk
+            <a href="{{ route('penerimaan_barang.create')}}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah Stok
             </a>
             <a href="{{ route('export_produk.pdf') }}" class="btn btn-success" target="_blank">Export PDF</a>
         </div>
@@ -23,7 +23,7 @@
                                 <th class="text-center">Warna</th>
                                 <th class="text-center">Harga</th>
                                 <th class="text-center">Stok</th>
-                                <th class="text-center">Aksi</th>
+                                <th class="text-center">Total Terjual</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,14 +32,9 @@
                                     <td class="text-center">{{ $varian->produk->nama }}</td>
                                     <td class="text-center">{{ $varian->size }}</td>
                                     <td class="text-center">{{ $varian->warna }}</td>
-                                    <td class="text-center">{{ $varian->harga_jual }}</td>
+                                    <td class="text-center">{{ number_format($varian->harga_jual) }}</td>
                                     <td class="text-center">{{ $varian->stok }}</td>
-                                    <td class="text-center" style="width: 12%">
-                                        <a href="{{ route('penerimaan_barang.create')}}" class="btn btn-warning">
-                                            <span class="icon text-white">
-                                            </span>Restok
-                                        </a>                                        
-                                    </td>
+                                    <td class="text-center">{{ $varian->detailTransaksi->sum('total_terjual') ?? 0 }}</td>
                                 </tr>
                             @empty
                                 <tr>

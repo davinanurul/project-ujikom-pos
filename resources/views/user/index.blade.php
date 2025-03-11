@@ -21,7 +21,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center">ID</th>
+                                <th class="text-center">No</th>
                                 <th class="text-center">Nama User</th>
                                 <th class="text-center">Hak Akses</th>
                                 <th class="text-center">Tanggal Dibuat</th>
@@ -30,9 +30,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($daftarPengguna as $pengguna)
+                            @foreach ($daftarPengguna as $index => $pengguna)
                                 <tr>
-                                    <td class="text-center">{{ $pengguna->user_id }}</td>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td>{{ $pengguna->user_nama }}</td>
                                     <td class="text-center">{{ $pengguna->user_hak }}</td>
                                     <td class="text-center">{{ $pengguna->created_at }}</td>

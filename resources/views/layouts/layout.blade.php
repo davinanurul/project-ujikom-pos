@@ -97,7 +97,7 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('laporan.transaksi') }}">Daftar Transaksi</a>
+                        <a class="collapse-item" href="{{ route('transaksi.index') }}">Daftar Transaksi</a>
                         <a class="collapse-item" href="{{ route('produk_varian.index') }}">Varian Produk</a>
                     </div>
                 </div>

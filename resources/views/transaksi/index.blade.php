@@ -3,12 +3,13 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb-3">
-            <a href="{{ route('transaksi.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Buat Transaksi
-            </a>
-            <button class="btn btn-success" onclick="window.print();">
-                <i class="fas fa-print"></i> Print/Ekspor
-            </button>
+            <form method="GET" action="{{ route('transaksi.index') }}" class="d-flex gap-2">
+                <input type="date" name="tanggal_mulai" class="form-control w-auto" value="{{ request('tanggal_mulai') }}">
+                <input type="date" name="tanggal_selesai" class="form-control w-auto" value="{{ request('tanggal_selesai') }}">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Reset</a>
+            </form>
+            <a href="{{ route('export.pdf') }}" class="btn btn-success" target="_blank">Export PDF</a>
         </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -31,9 +32,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($daftarTransaksi as $transaksi)
+                            @forelse ($transaksi as $index => $transaksi)
                                 <tr>
-                                    <td class="text-center">{{ $transaksi->id }}</td>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $transaksi->nomor_transaksi }}</td>
                                     <td class="text-center">{{ $transaksi->tanggal }}</td>
                                     <td class="text-center">{{ $transaksi->user->user_nama }}</td>

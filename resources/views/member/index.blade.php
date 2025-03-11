@@ -21,7 +21,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center">ID</th>
+                                <th class="text-center">No</th>
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Telepon</th>
                                 <th class="text-center">Alamat</th>
@@ -31,9 +31,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($members as $member)
+                            @forelse ($members as $index => $member)
                                 <tr>
-                                    <td class="text-center">{{ $member->id }}</td>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $member->nama }}</td>
                                     <td class="text-center">{{ $member->telepon }}</td>
                                     <td class="text-center">{{ $member->alamat }}</td>

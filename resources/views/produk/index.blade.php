@@ -20,6 +20,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th class="text-center">No</th>
                                 <th class="text-center">Supplier</th>
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Kode</th>
@@ -28,8 +29,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($produks as $produk)
+                            @forelse ($produks as $index => $produk)
                                 <tr>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $produk->supplier->nama }}</td>
                                     <td class="text-center">{{ $produk->kategori->nama_kategori }}</td>
                                     <td class="text-center">{{ $produk->kode }}</td>

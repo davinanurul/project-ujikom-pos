@@ -20,7 +20,7 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr>
+                            <tr><th class="text-center">No</th>
                                 <th class="text-center">Nama</th>
                                 <th class="text-center">Kontak</th>
                                 <th class="text-center">Alamat</th>
@@ -28,8 +28,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($suppliers as $supplier)
+                            @forelse ($suppliers as $index => $supplier)
                                 <tr>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $supplier->nama }}</td>
                                     <td class="text-center">{{ $supplier->kontak }}</td>
                                     <td class="text-center">{{ $supplier->alamat }}</td>

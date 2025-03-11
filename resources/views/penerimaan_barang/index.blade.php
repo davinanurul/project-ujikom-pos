@@ -20,6 +20,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th class="text-center">No</th>
                                 <th class="text-center">Nama Supplier</th>
                                 <th class="text-center">Produk</th>
                                 <th class="text-center">Size</th>
@@ -30,8 +31,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($restoks as $restok)
+                            @forelse ($restoks as $index => $restok)
                                 <tr>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $restok->supplier->nama }}</td>
                                     <td class="text-center">{{ $restok->produk->nama }}</td>
                                     <td class="text-center">{{ $restok->varian->size }}</td>

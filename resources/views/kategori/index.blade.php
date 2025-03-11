@@ -20,13 +20,15 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th class="text-center" style="width: 8%">No</th>
                                 <th class="text-center">Nama Kategori</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($kategoris as $kategori)
+                            @forelse ($kategoris as $index => $kategori)
                                 <tr>
+                                    <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $kategori->nama_kategori }}</td>
                                     <td class="text-center">
                                         <button class="btn btn-warning edit-btn"

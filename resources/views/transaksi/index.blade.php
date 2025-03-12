@@ -9,7 +9,6 @@
                 <button type="submit" class="btn btn-primary">Filter</button>
                 <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Reset</a>
             </form>
-            <a href="{{ route('export.pdf') }}" class="btn btn-success" target="_blank">Export PDF</a>
         </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">

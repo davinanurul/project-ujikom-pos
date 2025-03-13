@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{{ asset('asset') }}/dist/vendor/DataTables/datatables.css" />
 
     <script src="{{ asset('asset') }}/dist/vendor/DataTables/datatables.js"></script>
+    @stack('style')
 
 </head>
 
@@ -419,6 +420,7 @@
     </script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @stack('script')
 
 </body>
 

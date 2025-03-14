@@ -15,15 +15,15 @@ class DatabaseSeeder extends Seeder
     {
 
         // $this->call([KategoriSeeder::class]);
-        Produk::factory()->count(50)->create();
+        // Produk::factory()->count(50)->create();
 
-        // DB::table('users')->insert([
-        //     [
-        //         'user_nama' => 'admin',
-        //         'user_pass' => Hash::make('admin'),
-        //         'user_hak' => 'ad',
-        //         'user_sts' => '1'
-        //     ],
-        // ]);
+        DB::table('users')->insert([
+            [
+                'user_nama' => 'admin',
+                'user_pass' => Hash::make('admin'),
+                'user_hak' => 'admin',
+                'user_sts' => '1'
+            ],
+        ]);
     }
 }

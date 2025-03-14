@@ -31,8 +31,7 @@
                                     <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="text-center">{{ $kategori->nama_kategori }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning edit-btn"
-                                            data-id="{{ $kategori->id }}"
+                                        <button class="btn btn-warning edit-btn" data-id="{{ $kategori->id }}"
                                             data-nama="{{ $kategori->nama_kategori }}" data-toggle="modal"
                                             data-target="#editKategoriModal">
                                             <i class="fas fa-edit"></i> Edit
@@ -41,7 +40,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2" class="text-center">Tidak ada data.</td>
+                                    <td colspan="3" class="text-center">Tidak ada data.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -81,14 +80,15 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Kategori</h5>
                 </div>
-                <form id="editForm" action="{{ route('kategori.update', $kategori->id) }}" method="POST">
+                <form id="editForm" action="" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
                         <input type="hidden" id="edit_id" name="id">
                         <div class="form-group">
                             <label>Nama Kategori</label>
-                            <input type="text" class="form-control" id="edit_nama_kategori" name="nama_kategori" required>
+                            <input type="text" class="form-control" id="edit_nama_kategori" name="nama_kategori"
+                                required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -99,34 +99,35 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const nama = this.getAttribute('data-nama');
-                document.getElementById('edit_id').value = id;
-                document.getElementById('edit_nama_kategori').value = nama;
-                document.getElementById('editForm').action = `/kategori/${id}`;
-            });
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: {!! json_encode(session('success')) !!}
-                });
-            @endif
-
-            @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: {!! json_encode(session('error')) !!}
-                });
-            @endif
-        });
-    </script>
 @endsection
+@push('script')
+<script>
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const nama = this.getAttribute('data-nama');
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_nama_kategori').value = nama;
+            document.getElementById('editForm').action = `/kategori/${id}`;
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: {!! json_encode(session('success')) !!}
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: {!! json_encode(session('error')) !!}
+            });
+        @endif
+    });
+</script>
+@endpush

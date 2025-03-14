@@ -9,14 +9,24 @@ use Illuminate\Http\Request;
 
 class ProdukVarianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $produkList = Produk::all();
+
+        // Ambil ID produk dari request (jika ada), default ke null jika kosong
+        $idProduk = $request->query('id_produk');
+
+        // Query produk varian (tampilkan semua jika tidak difilter)
         $produkVarians = ProdukVarian::with(['detailTransaksi' => function ($query) {
             $query->selectRaw('id_varian, SUM(qty) as total_terjual')
                 ->groupBy('id_varian');
-        }])->get();
+        }])
+            ->when(!empty($idProduk), function ($query) use ($idProduk) {
+                return $query->where('id_produk', $idProduk);
+            }) // Jika tidak ada filter, biarkan query menampilkan semua data
+            ->get();
 
-        return view('produk_varian.index', compact('produkVarians'));
+        return view('produk_varian.index', compact('produkVarians', 'produkList', 'idProduk'));
     }
 
     public function create()

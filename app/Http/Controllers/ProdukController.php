@@ -6,6 +6,7 @@ use App\Models\Kategori;
 use App\Models\Produk;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -64,16 +65,31 @@ class ProdukController extends Controller
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
             'supplier_id' => 'required|exists:supplier,id',
-            'kode' => 'required|string|max:50|unique:produk,kode,' . $id,
             'nama' => 'required|string|max:255',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
+
+        // Cek apakah ada file gambar baru yang diupload
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if ($produk->gambar) {
+                Storage::disk('public')->delete('produk-img/' . $produk->gambar);
+            }
+
+            // Simpan gambar baru dan ambil nama file-nya
+            $gambarPath = $request->file('gambar')->store('produk-img', 'public');
+            $gambarName = basename($gambarPath);
+        } else {
+            $gambarName = $produk->gambar;
+        }
+
         $produk->update([
             'nama' => $request->nama,
             'kategori_id' => $request->kategori_id,
             'supplier_id' => $request->supplier_id,
-            'kode' => $request->kode,
+            'gambar' => $gambarName,
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui!');

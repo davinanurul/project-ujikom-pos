@@ -34,6 +34,9 @@
                     <div class="form-group mt-0">
                         <label for="gambar">Gambar Produk (Opsional)</label>
                         <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
+                        <div class="mt-2" id="preview-container" style="display: none;">
+                            <img id="preview" alt="Pratinjau Gambar" width="150">
+                        </div>
                     </div>
                     <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -44,3 +47,23 @@
         </div>
     </div>
 @endsection
+@push('script')
+    <script>
+        document.getElementById('gambar').addEventListener('change', function(event) {
+            const previewContainer = document.getElementById('preview-container');
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    preview.src = reader.result;
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+    </script>
+@endpush

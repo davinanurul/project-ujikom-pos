@@ -7,31 +7,29 @@ use App\Models\Member;
 use App\Models\Produk;
 use App\Models\DetailTransaksi;
 use App\Models\ProdukVarian;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
 
 class TransaksiController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Transaksi::with(['user', 'member'])
-        ->orderBy('created_at', 'desc'); 
+    {
+        $query = Transaksi::with(['user', 'member'])
+            ->orderBy('created_at', 'desc');
 
-    if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
-        $tanggalMulai = Carbon::parse($request->tanggal_mulai)->startOfDay();
-        $tanggalSelesai = Carbon::parse($request->tanggal_selesai)->endOfDay();
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $tanggalMulai = Carbon::parse($request->tanggal_mulai)->startOfDay();
+            $tanggalSelesai = Carbon::parse($request->tanggal_selesai)->endOfDay();
 
-        $query->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai]);
+            $query->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai]);
+        }
+
+        $transaksi = $query->get();
+
+        return view('transaksi.index', compact('transaksi'));
     }
 
-    $transaksi = $query->get();
-
-    return view('transaksi.index', compact('transaksi'));
-}
-    
     public function create()
     {
         $produks = Produk::whereHas('varian', function ($query) {
@@ -46,6 +44,7 @@ class TransaksiController extends Controller
         $request->validate([
             'member_id' => 'nullable|exists:member,id',
             'pembayaran' => 'required|in:TUNAI,DEBIT,QRIS',
+            'produk_id' => 'required|array',
             'warna' => 'required|array',
             'size' => 'required|array',
             'qty' => 'required|array',
@@ -61,7 +60,7 @@ class TransaksiController extends Controller
             'tanggal' => now(),
             'member_id' => $request->member_id,
             'pembayaran' => $request->pembayaran,
-            'total' => preg_replace('/[^\d]/', '', $request->total),
+            'total' => preg_replace('/[^\d]/', '', $request->total), // Pastikan total tanpa desimal
             'user_id' => Auth::id(),
         ]);
 
@@ -77,8 +76,8 @@ class TransaksiController extends Controller
                     'produk_id' => $produk_id,
                     'id_varian' => $varian->id,
                     'qty' => $request->qty[$index],
-                    'harga' => preg_replace('/[^\d]/', '', $request->harga[$index]),
-                    'subtotal' => preg_replace('/[^\d]/', '', $request->subtotal[$index]),
+                    'harga' => preg_replace('/[^\d]/', '', $request->harga[$index]), // Pastikan harga tanpa desimal
+                    'subtotal' => preg_replace('/[^\d]/', '', $request->subtotal[$index]), // Pastikan subtotal tanpa desimal
                 ]);
 
                 // Kurangi stok
@@ -123,15 +122,7 @@ class TransaksiController extends Controller
 
         return response()->json([
             'harga' => $varian ? $varian->harga_jual : 0,
-            'id_varian' => $varian ? $varian->id : null // Tambahkan id_varian ke response
+            'id_varian' => $varian ? $varian->id : null,
         ]);
-    }
-
-    public function details($id)
-    {
-        $transaksi = Transaksi::findOrFail($id);
-        $detailTransaksi = $transaksi->detailTransaksi; // Ambil detail transaksi berdasarkan transaksi_id
-
-        return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
     }
 }

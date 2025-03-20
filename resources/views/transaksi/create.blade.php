@@ -12,11 +12,9 @@
                     <div class="table table-borderless">
                         <table style="width: 100%">
                             <tr>
-                                <td style="width: 10%">Taggal</td>
+                                <td style="width: 10%">Tanggal</td>
                                 <td style="width: 5%">:</td>
-                                <td><span
-                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span>
-                                </td>
+                                <td><span class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span></td>
                                 <td style="width: 20%; text-align:end">Member (Opsional)</td>
                                 <td style="width: 5%">:</td>
                                 <td style="width: 20%">
@@ -31,10 +29,7 @@
                             <tr>
                                 <td>Kasir</td>
                                 <td>:</td>
-                                <td><span
-                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span>
-                                </td>
-
+                                <td><span class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span></td>
                             </tr>
                         </table>
                     </div>
@@ -53,14 +48,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- Baris pertama (default) -->
                                 <tr>
                                     <td>
-                                        <select class="form-control produk-select" name="produk_id[]" required>
-                                            <option value="" disabled selected>Pilih Produk</option>
-                                            @foreach ($produks as $produk)
-                                                <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" class="form-control id_produk" name="id_produk[]" readonly>
+                                        <input type="hidden" class="form-control produk_id" name="produk_id[]" readonly> <!-- Tambahkan input hidden untuk produk_id -->
                                     </td>
                                     <td>
                                         <select class="form-control warna-select" name="warna[]" required>
@@ -73,18 +65,16 @@
                                         </select>
                                     </td>
                                     <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
-                                    <td><input type="text" class="form-control harga_jual" name="harga[]" readonly></td>
-                                    <td><input type="number" name="qty[]" class="form-control quantity" min="1"
-                                            value="1" oninput="calculateTotal(this)" required></td>
+                                    <td><input type="text" class="form-control harga" name="harga[]" readonly></td>
+                                    <td><input type="number" name="qty[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
                                     <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm remove-row"
-                                            onclick="removeRow(this)">Hapus</button></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah
-                        Produk</button>
+                    <button type="button" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#produkModal">Pilih Produk</button>
+                    <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah Produk</button>
 
                     <div class="form-group">
                         <label>Total Keseluruhan</label>
@@ -106,157 +96,190 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="produkModal" tabindex="-1" aria-labelledby="produkModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="produkModalLabel">Pilih Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-1 row-cols-md-5 g-3">
+                        @foreach ($produks as $produk)
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" class="card-img-top" alt="{{ $produk->name }}" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">{{ $produk->nama }}</h6>
+                                        <button type="button" class="btn btn-primary btn-block buy-button" data-id="{{ $produk->id }}" data-name="{{ $produk->nama }}" data-bs-dismiss="modal">Pilih</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        document.addEventListener("change", function(event) {
-            let row = event.target.closest("tr");
-            if (!row) return;
+        let activeRow = null;
 
-            let produkDropdown = row.querySelector(".produk-select");
-            let warnaDropdown = row.querySelector(".warna-select");
-            let sizeDropdown = row.querySelector(".size-select");
+        document.addEventListener('DOMContentLoaded', function() {
+            const buyButtons = document.querySelectorAll('.buy-button');
 
-            // Jika produk dipilih, ambil daftar warna dengan stok lebih dari 0
-            if (event.target.classList.contains("produk-select")) {
-                let produkId = produkDropdown.value;
+            buyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const produkId = this.getAttribute('data-id');
+                    const produkName = this.getAttribute('data-name');
 
-                warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
-                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                    // Jika tidak ada baris aktif, gunakan baris pertama (default)
+                    if (!activeRow) {
+                        activeRow = document.querySelector("#produkTable tbody tr");
+                    }
 
-                fetch(`/get-varians/${produkId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.warna.forEach(item => {
-                            let option = document.createElement("option");
-                            option.value = item.warna;
-                            option.textContent = item.warna;
-                            warnaDropdown.appendChild(option);
-                        });
-                    });
-            }
+                    if (activeRow) {
+                        const idProdukInput = activeRow.querySelector('.id_produk');
+                        idProdukInput.value = produkName;
 
-            // Jika warna dipilih, ambil daftar size yang memiliki stok lebih dari 0
-            if (event.target.classList.contains("warna-select")) {
-                let produkId = produkDropdown.value;
-                let warna = warnaDropdown.value;
+                        const produkIdInput = activeRow.querySelector('.produk_id'); // Isi input hidden produk_id
+                        produkIdInput.value = produkId;
 
-                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                        const hiddenInput = activeRow.querySelector('.id_varian');
+                        hiddenInput.value = produkId;
 
-                fetch(`/get-sizes/${produkId}/${warna}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.sizes.forEach(item => {
-                            let option = document.createElement("option");
-                            option.value = item.size;
-                            option.textContent = item.size;
-                            sizeDropdown.appendChild(option);
-                        });
-                    });
-            }
-        });
-
-        document.addEventListener("change", function(event) {
-            if (event.target.classList.contains("warna-select") || event.target.classList.contains("size-select")) {
-                let row = event.target.closest("tr");
-                let produkId = row.querySelector(".produk-select").value;
-                let warna = row.querySelector(".warna-select").value;
-                let size = row.querySelector(".size-select").value;
-                let hargaInput = row.querySelector(".harga_jual");
-                let idVarianInput = row.querySelector(".id_varian");
-
-                if (produkId && warna && size) {
-                    fetch(`/get-harga/${produkId}/${warna}/${size}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let harga = parseInt(data.harga) || 0;
-                            hargaInput.value = formatRupiah(harga);
-                            idVarianInput.value = data.id_varian; // Masukkan id_varian ke inputan varian
-                            calculateTotal(row.querySelector(".quantity"));
-                        });
-                }
-            }
-        });
-
-        function calculateTotal(input) {
-            let row = input.closest("tr");
-            let hargaInput = row.querySelector(".harga_jual").value.replace(/\D/g, ""); // Hanya ambil angka
-            let harga = parseInt(hargaInput) || 0;
-            let quantity = parseInt(row.querySelector(".quantity").value) || 1;
-            let total = harga * quantity;
-
-            row.querySelector(".total").value = formatRupiah(total);
-            calculateGrandTotal();
-        }
-
-        function calculateGrandTotal() {
-            let totalFields = document.querySelectorAll(".total");
-            let grandTotal = 0;
-
-            totalFields.forEach(field => {
-                let totalValue = field.value.replace(/\D/g, ""); // Ambil hanya angka
-                grandTotal += parseInt(totalValue) || 0;
+                        // Ambil daftar warna berdasarkan produk yang dipilih
+                        fetch(`/get-varians/${produkId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const warnaDropdown = activeRow.querySelector('.warna-select');
+                                warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                                data.warna.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.value = item.warna;
+                                    option.textContent = item.warna;
+                                    warnaDropdown.appendChild(option);
+                                });
+                            });
+                    }
+                });
             });
 
-            document.getElementById("grand_total").value = formatRupiah(grandTotal);
+            // Event listener untuk perubahan dropdown warna
+            document.addEventListener('change', function(event) {
+                if (event.target.classList.contains('warna-select')) {
+                    const row = event.target.closest('tr');
+                    const produkId = row.querySelector('.id_varian').value;
+                    const warna = event.target.value;
+
+                    if (produkId && warna) {
+                        // Ambil daftar size berdasarkan produk dan warna
+                        fetch(`/get-sizes/${produkId}/${warna}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const sizeDropdown = row.querySelector('.size-select');
+                                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                                data.sizes.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.value = item.size;
+                                    option.textContent = item.size;
+                                    sizeDropdown.appendChild(option);
+                                });
+                            });
+                    }
+                }
+            });
+
+            // Event listener untuk perubahan dropdown size
+            document.addEventListener('change', function(event) {
+                if (event.target.classList.contains('size-select')) {
+                    const row = event.target.closest('tr');
+                    const produkId = row.querySelector('.id_varian').value;
+                    const warna = row.querySelector('.warna-select').value;
+                    const size = event.target.value;
+
+                    if (produkId && warna && size) {
+                        // Ambil harga berdasarkan produk, warna, dan size
+                        fetch(`/get-harga/${produkId}/${warna}/${size}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const hargaInput = row.querySelector('.harga');
+                                hargaInput.value = formatRupiah(data.harga);
+                                calculateTotal(row.querySelector('.quantity'));
+                            });
+                    }
+                }
+            });
+        });
+
+        function setActiveRow(row) {
+            activeRow = row;
         }
 
         // Fungsi untuk format Rupiah
         function formatRupiah(angka) {
             return "Rp. " + angka.toLocaleString("id-ID");
         }
-
+        
         function addprodukRow() {
-            let table = document.getElementById("produkTable").getElementsByTagName('tbody')[0];
-            let newRow = table.insertRow();
+            const table = document.getElementById("produkTable").getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
             newRow.innerHTML = `
-        <td>
-            <select name="produk_id[]" class="form-control produk-select" id="produkDropdown" required>
-                <option value="" disabled selected>Pilih Produk</option>
-                    @foreach ($produks as $produk)
-                        <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
-                    @endforeach
-            </select>
-        </td>
-        <td>
-            <select name="warna[]" class="form-control warna-select" id="warnaDropdown" required>
-                <option value="" disabled selected>-</option>
-            </select>
-        </td>
-        <td>
-            <select name="size[]" class="form-control size-select" id="sizeDropdown" required>
-                <option value="" disabled selected>-</option>
-            </select>
-        </td>
-        <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
-        <td><input name="harga[]" type="text" class="form-control harga_jual" readonly></td>
-        <td><input name="qty[]" type="number" name="quantity[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
-        <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
-        <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
-    `;
+                <td>
+                    <input type="text" class="form-control id_produk" name="id_produk[]" readonly>
+                    <input type="hidden" class="form-control produk_id" name="produk_id[]" readonly> <!-- Tambahkan input hidden untuk produk_id -->
+                </td>
+                <td>
+                    <select class="form-control warna-select" name="warna[]" required>
+                        <option value="" disabled selected>-</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control size-select" name="size[]" required>
+                        <option value="" disabled selected>-</option>
+                    </select>
+                </td>
+                <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
+                <td><input type="text" class="form-control harga" name="harga[]" readonly></td>
+                <td><input type="number" name="qty[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
+                <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
+            `;
+
+            setActiveRow(newRow);
         }
 
         function removeRow(button) {
-            let row = button.closest("tr");
+            const row = button.closest("tr");
+            if (row === activeRow) {
+                activeRow = null;
+            }
             row.remove();
             calculateGrandTotal();
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-             @if (session('success'))
-                 Swal.fire({
-                     icon: 'success',
-                     title: 'Berhasil',
-                     text: {!! json_encode(session('success')) !!}
-                 });
-             @endif
- 
-             @if (session('error'))
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Gagal',
-                     text: {!! json_encode(session('error')) !!}
-                 });
-             @endif
-         });
+        function calculateTotal(input) {
+            const row = input.closest("tr");
+            const hargaInput = row.querySelector(".harga").value.replace(/\D/g, "");
+            const harga = parseInt(hargaInput) || 0;
+            const quantity = parseInt(row.querySelector(".quantity").value) || 1;
+            const total = harga * quantity;
+
+            row.querySelector(".total").value = formatRupiah(total);
+            calculateGrandTotal();
+        }
+
+        function calculateGrandTotal() {
+            const totalFields = document.querySelectorAll(".total");
+            let grandTotal = 0;
+
+            totalFields.forEach(field => {
+                const totalValue = field.value.replace(/\D/g, "");
+                grandTotal += parseInt(totalValue) || 0;
+            });
+
+            document.getElementById("grand_total").value = formatRupiah(grandTotal);
+        }
     </script>
 @endsection

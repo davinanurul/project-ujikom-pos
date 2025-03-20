@@ -28,15 +28,20 @@
     <link rel="stylesheet" href="{{ asset('asset') }}/dist/vendor/DataTables/datatables.css" />
 
     <script src="{{ asset('asset') }}/dist/vendor/DataTables/datatables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     @stack('style')
     <style>
         @media print {
             body * {
                 visibility: hidden;
             }
-            #dataTable, #dataTable * {
+
+            #dataTable,
+            #dataTable * {
                 visibility: visible;
             }
+
             #dataTable {
                 position: absolute;
                 left: 0;
@@ -44,7 +49,7 @@
                 width: 100%;
             }
         }
-    </style>    
+    </style>
 
 </head>
 
@@ -326,8 +331,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->user_nama }}</span>
-                                <img class="{{ asset('asset') }}/dist/vendor/img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->user_nama }}</span>
+                                <img class="{{ asset('asset') }}/dist/vendor/img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

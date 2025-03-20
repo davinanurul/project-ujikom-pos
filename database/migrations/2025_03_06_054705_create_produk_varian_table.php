@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('size', 10);
             $table->string('warna', 50);
             $table->integer('stok')->default(0);
-            $table->decimal('harga_jual', 10, 2);
+            $table->bigInteger('harga_jual');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

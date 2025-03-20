@@ -134,12 +134,4 @@ class TransaksiController extends Controller
 
         return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
     }
-
-    public function exportPDF()
-    {
-        $daftarTransaksi = Transaksi::all();
-        $pdf = Pdf::loadView('pdf.transaksi', compact('daftarTransaksi'));
-
-        return $pdf->stream('laporan-transaksi.pdf');
-    }
 }

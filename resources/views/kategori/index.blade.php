@@ -101,33 +101,33 @@
     </div>
 @endsection
 @push('script')
-<script>
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            const nama = this.getAttribute('data-nama');
-            document.getElementById('edit_id').value = id;
-            document.getElementById('edit_nama_kategori').value = nama;
-            document.getElementById('editForm').action = `/kategori/${id}`;
+    <script>
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const nama = this.getAttribute('data-nama');
+                document.getElementById('edit_id').value = id;
+                document.getElementById('edit_nama_kategori').value = nama;
+                document.getElementById('editForm').action = `/kategori/${id}`;
+            });
         });
-    });
 
-    document.addEventListener("DOMContentLoaded", function() {
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: {!! json_encode(session('success')) !!}
-            });
-        @endif
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: {!! json_encode(session('success')) !!}
+                });
+            @endif
 
-        @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: {!! json_encode(session('error')) !!}
-            });
-        @endif
-    });
-</script>
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: {!! json_encode(session('error')) !!}
+                });
+            @endif
+        });
+    </script>
 @endpush

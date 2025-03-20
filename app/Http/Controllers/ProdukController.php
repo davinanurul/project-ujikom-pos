@@ -28,7 +28,14 @@ class ProdukController extends Controller
             'kategori_id' => 'required|exists:kategori,id',
             'supplier_id' => 'required|exists:supplier,id',
             'nama' => 'required|string|max:255',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $gambarNama = null;
+        if ($request->hasFile('gambar')) {
+            $gambarNama = $request->file('gambar')->store('produk-img', 'public');
+            $gambarNama = basename($gambarNama); // Ambil hanya nama file-nya
+        }
 
         $produk = Produk::create([
             'kode' => Produk::generateKodeBarang(),
@@ -36,6 +43,7 @@ class ProdukController extends Controller
             'kategori_id' => $request->kategori_id,
             'supplier_id' => $request->supplier_id,
             'user_id' => auth()->id(),
+            'gambar' => $gambarNama,
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');

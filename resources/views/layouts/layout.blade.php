@@ -29,6 +29,22 @@
 
     <script src="{{ asset('asset') }}/dist/vendor/DataTables/datatables.js"></script>
     @stack('style')
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #dataTable, #dataTable * {
+                visibility: visible;
+            }
+            #dataTable {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>    
 
 </head>
 

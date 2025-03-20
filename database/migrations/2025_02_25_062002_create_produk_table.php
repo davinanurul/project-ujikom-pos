@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('supplier_id')->constrained('supplier')->onDelete('cascade');
             $table->string('kode')->unique();
             $table->string('nama');
+            $table->string('gambar')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

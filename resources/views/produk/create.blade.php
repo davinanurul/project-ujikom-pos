@@ -7,7 +7,7 @@
                 <h6 class="m-0 font-weight-bold">Form Tambah Produk</h6>
             </div>
             <div class="card-body">
-                <form action="{{ route('produk.store') }}" method="POST">
+                <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mt-0">
                         <label for="kategori_id">Kategori</label>
@@ -30,6 +30,10 @@
                     <div class="form-group mt-0">
                         <label for="nama">Nama</label>
                         <input type="text" name="nama" id="nama" class="form-control" required>
+                    </div>
+                    <div class="form-group mt-0">
+                        <label for="gambar">Gambar Produk (Opsional)</label>
+                        <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
                     </div>
                     <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary">Simpan</button>

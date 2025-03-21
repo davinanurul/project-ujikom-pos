@@ -5,6 +5,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PenerimaanBarangController;
+use App\Http\Controllers\PengajuanBarangController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProdukVarianController;
 use App\Http\Controllers\SupplierController;
@@ -77,6 +78,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-varian/{produk_id}/{warna}/{size}', [TransaksiController::class, 'getVarian']);
     Route::get('/transaksi/{id}/details', [TransaksiController::class, 'details'])->name('transaksi.details');
     Route::get('/export-pdf', [TransaksiController::class, 'exportPDF'])->name('export.pdf');
+
+    // Route Pengajuan Barang
+    Route::get('index', [PengajuanBarangController::class, 'index'])->name('pengajuanBarang.index');
+    Route::post('pengajuan/store', [PengajuanBarangController::class, 'store'])->name('pengajuanBarang.store');
 
 });
 

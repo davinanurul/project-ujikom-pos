@@ -90,6 +90,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('kategori.index') }}">Kategori</a>
                         <a class="collapse-item" href="{{ route('produk.index') }}">Produk</a>
+                        <a class="collapse-item" href="{{ route('pengajuanBarang.index') }}">Pengajuan Barang</a>
                     </div>
                 </div>
             </li>

@@ -47,6 +47,10 @@ class ProdukController extends Controller
             'gambar' => $gambarNama,
         ]);
 
+        // Panggil cekTerpenuhi setelah produk ditambahkan
+        $pengajuanBarangController = new PengajuanBarangController();
+        $pengajuanBarangController->cekTerpenuhi();
+
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 

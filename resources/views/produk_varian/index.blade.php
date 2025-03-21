@@ -26,9 +26,9 @@
                     <div class="dropdown-menu" aria-labelledby="exportDropdown">
                         <a class="dropdown-item" href="#" id="exportExcel"><i class="fas fa-file-excel"></i> Export
                             Excel</a>
-                        <a class="dropdown-item" href="#" id="exportPDF"><i class="fas fa-file-pdf"></i> Export
-                            PDF</a>
-                        <a class="dropdown-item" href="#" id="exportPrint"><i class="fas fa-print"></i> Print</a>
+                            <a class="dropdown-item" href="{{ route('produk_varian.exportPDF', ['id_produk' => request('id_produk')]) }}" id="exportPDF">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </a>
                     </div>
                 </div>
             </div>

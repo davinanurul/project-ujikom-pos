@@ -9,7 +9,7 @@ class KategoriController extends Controller
 {
     public function index()
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::orderBy('created_at', 'desc')->get();
         return view('kategori.index', compact('kategoris'));
     }
 

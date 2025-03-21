@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Produk;
 use App\Models\DetailTransaksi;
 use App\Models\ProdukVarian;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -140,5 +141,36 @@ class TransaksiController extends Controller
             'jumlah_transaksi' => $jumlahTransaksi,
             'total_pendapatan' => $totalPendapatan,
         ]);
+    }
+
+    public function exportPDF(Request $request)
+    {
+        // Query data transaksi
+        $query = Transaksi::with(['user', 'member'])
+            ->orderBy('created_at', 'desc');
+
+        // Filter berdasarkan tanggal jika ada
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $tanggalMulai = Carbon::parse($request->tanggal_mulai)->startOfDay();
+            $tanggalSelesai = Carbon::parse($request->tanggal_selesai)->endOfDay();
+
+            $query->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai]);
+        }
+
+        // Ambil data transaksi
+        $transaksi = $query->get();
+
+        // Data untuk PDF
+        $data = [
+            'transaksi' => $transaksi,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+        ];
+
+        // Load view dan generate PDF
+        $pdf = Pdf::loadView('transaksi.pdf', $data);
+
+        // Download PDF
+        return $pdf->download('laporan-transaksi.pdf');
     }
 }

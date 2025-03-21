@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('produk_varian/create', [ProdukVarianController::class, 'create'])->name('produk_varian.create');
     Route::post('produk_varian/store', [ProdukVarianController::class, 'store'])->name('produk_varian.store');
     Route::get('/export_produk-pdf', [ProdukVarianController::class, 'exportPDF'])->name('export_produk.pdf');
+    Route::get('/produk-varian/export-pdf', [ProdukVarianController::class, 'exportPDF'])->name('produk_varian.exportPDF');
 
     // Route Penerimaan Barang
     Route::get('penerimaan_barang', [PenerimaanBarangController::class, 'index'])->name('penerimaan_barang.index');
@@ -79,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaksi/{id}/details', [TransaksiController::class, 'details'])->name('transaksi.details');
     Route::get('/export-pdf', [TransaksiController::class, 'exportPDF'])->name('export.pdf');
     Route::get('/transaksi-harian', [TransaksiController::class, 'getTransaksiHarian']);
+    Route::get('/transaksi/export-pdf', [TransaksiController::class, 'exportPDF'])->name('transaksi.exportPDF');
 
     // Route Pengajuan Barang
     Route::get('index', [PengajuanBarangController::class, 'index'])->name('pengajuanBarang.index');

@@ -151,7 +151,7 @@ class PengajuanBarangController extends Controller
         $members = Member::all();
 
         $pdf = Pdf::loadView('Pengajuan_barang.pdf', compact('pengajuans', 'members'));
-        return $pdf->stream('Pengajuan_barang.pdf');
+        return $pdf->download('Pengajuan_barang.pdf');
     }
 
     public function updateTerpenuhi(Request $request, $id)

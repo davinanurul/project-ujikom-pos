@@ -14,7 +14,9 @@
                             <tr>
                                 <td style="width: 10%">Tanggal</td>
                                 <td style="width: 5%">:</td>
-                                <td><span class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span></td>
+                                <td><span
+                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ now()->format('d F Y') }}</span>
+                                </td>
                                 <td style="width: 20%; text-align:end">Member (Opsional)</td>
                                 <td style="width: 5%">:</td>
                                 <td style="width: 20%">
@@ -29,11 +31,16 @@
                             <tr>
                                 <td>Kasir</td>
                                 <td>:</td>
-                                <td><span class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span></td>
+                                <td><span
+                                        class="border px-2 py-1 rounded bg-light d-inline-block">{{ Auth::user()->user_nama }}</span>
+                                </td>
                             </tr>
                         </table>
                     </div>
-
+                    <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah
+                        Produk</button>
+                    <button type="button" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal"
+                        data-bs-target="#produkModal">Pilih Produk</button>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="produkTable">
                             <thead>
@@ -52,7 +59,8 @@
                                 <tr>
                                     <td>
                                         <input type="text" class="form-control id_produk" name="id_produk[]" readonly>
-                                        <input type="hidden" class="form-control produk_id" name="produk_id[]" readonly> <!-- Tambahkan input hidden untuk produk_id -->
+                                        <input type="hidden" class="form-control produk_id" name="produk_id[]" readonly>
+                                        <!-- Tambahkan input hidden untuk produk_id -->
                                     </td>
                                     <td>
                                         <select class="form-control warna-select" name="warna[]" required>
@@ -66,15 +74,15 @@
                                     </td>
                                     <input type="hidden" class="form-control id_varian" name="id_varian[]" readonly>
                                     <td><input type="text" class="form-control harga" name="harga[]" readonly></td>
-                                    <td><input type="number" name="qty[]" class="form-control quantity" min="1" value="1" oninput="calculateTotal(this)" required></td>
+                                    <td><input type="number" name="qty[]" class="form-control quantity" min="1"
+                                            value="1" oninput="calculateTotal(this)" required></td>
                                     <td><input name="subtotal[]" type="text" class="form-control total" readonly></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm remove-row" onclick="removeRow(this)">Hapus</button></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-row"
+                                            onclick="removeRow(this)">Hapus</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#produkModal">Pilih Produk</button>
-                    <button type="button" class="btn btn-success btn-sm mb-3" onclick="addprodukRow()">+ Tambah Produk</button>
 
                     <div class="form-group">
                         <label>Total Keseluruhan</label>
@@ -105,24 +113,47 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row row-cols-1 row-cols-md-5 g-3">
+                    <!-- Input Pencarian -->
+                    <div class="mb-3">
+                        <input type="text" id="searchProduk" class="form-control" placeholder="Cari produk...">
+                    </div>
+
+                    <!-- Daftar Produk dalam Card -->
+                    <div class="row row-cols-1 row-cols-md-4 g-4" id="produkList">
                         @foreach ($produks as $produk)
-                            <div class="col">
+                            <div class="col produk-item">
                                 <div class="card h-100">
-                                    <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" class="card-img-top" alt="{{ $produk->name }}" style="height: 170px; object-fit: cover;">
+                                    <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" class="card-img-top"
+                                        alt="{{ $produk->nama }}" style="height: 200px; object-fit: cover;">
                                     <div class="card-body text-center">
                                         <h6 class="card-title">{{ $produk->nama }}</h6>
-                                        <button type="button" class="btn btn-primary btn-block buy-button" data-id="{{ $produk->id }}" data-name="{{ $produk->nama }}" data-bs-dismiss="modal">Pilih</button>
+                                        <button type="button" class="btn btn-primary btn-block buy-button"
+                                            data-id="{{ $produk->id }}" data-name="{{ $produk->nama }}"
+                                            data-bs-dismiss="modal">Pilih</button>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" class="mt-3">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- Pagination akan diisi oleh JavaScript -->
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@push('script')
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         let activeRow = null;
 
@@ -143,7 +174,8 @@
                         const idProdukInput = activeRow.querySelector('.id_produk');
                         idProdukInput.value = produkName;
 
-                        const produkIdInput = activeRow.querySelector('.produk_id'); // Isi input hidden produk_id
+                        const produkIdInput = activeRow.querySelector(
+                            '.produk_id'); // Isi input hidden produk_id
                         produkIdInput.value = produkId;
 
                         const hiddenInput = activeRow.querySelector('.id_varian');
@@ -154,7 +186,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 const warnaDropdown = activeRow.querySelector('.warna-select');
-                                warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                                warnaDropdown.innerHTML =
+                                    '<option value="" disabled selected>-</option>';
                                 data.warna.forEach(item => {
                                     const option = document.createElement('option');
                                     option.value = item.warna;
@@ -179,7 +212,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 const sizeDropdown = row.querySelector('.size-select');
-                                sizeDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                                sizeDropdown.innerHTML =
+                                    '<option value="" disabled selected>-</option>';
                                 data.sizes.forEach(item => {
                                     const option = document.createElement('option');
                                     option.value = item.size;
@@ -221,7 +255,7 @@
         function formatRupiah(angka) {
             return "Rp. " + angka.toLocaleString("id-ID");
         }
-        
+
         function addprodukRow() {
             const table = document.getElementById("produkTable").getElementsByTagName('tbody')[0];
             const newRow = table.insertRow();
@@ -281,5 +315,166 @@
 
             document.getElementById("grand_total").value = formatRupiah(grandTotal);
         }
+
+        $(document).ready(function() {
+            const produkItems = $('.produk-item'); // Ambil semua item produk
+            const itemsPerPage = 8; // Jumlah item per halaman
+            let currentPage = 1; // Halaman saat ini
+
+            // Fungsi untuk menampilkan produk berdasarkan halaman
+            function showPage(page) {
+                produkItems.hide(); // Sembunyikan semua produk
+                produkItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+            .show(); // Tampilkan produk untuk halaman tertentu
+            }
+
+            // Fungsi untuk mengupdate pagination
+            function updatePagination() {
+                const totalPages = Math.ceil(produkItems.length / itemsPerPage);
+                let paginationHtml = '';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHtml += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#">${i}</a>
+                </li>
+            `;
+                }
+
+                $('#pagination').html(paginationHtml);
+            }
+
+            // Fungsi untuk mereset pencarian dan pagination
+            function resetSearchAndPagination() {
+                $('#searchProduk').val(''); // Reset input pencarian
+                produkItems.show(); // Tampilkan semua produk
+                currentPage = 1; // Kembali ke halaman pertama
+                showPage(currentPage); // Tampilkan halaman pertama
+                updatePagination(); // Update pagination
+            }
+
+            // Tampilkan halaman pertama saat modal dibuka
+            showPage(currentPage);
+            updatePagination();
+
+            // Event listener untuk pagination
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                currentPage = parseInt($(this).text());
+                showPage(currentPage);
+                updatePagination();
+            });
+
+            // Event listener untuk pencarian
+            $('#searchProduk').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+
+                produkItems.each(function() {
+                    const produkName = $(this).find('.card-title').text().toLowerCase();
+                    if (produkName.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Reset pagination setelah pencarian
+                currentPage = 1;
+                updatePagination();
+            });
+
+            // Event listener untuk tombol "Pilih"
+            $(document).on('click', '.buy-button', function() {
+                const produkId = $(this).data('id');
+                const produkName = $(this).data('name');
+
+                if (!activeRow) {
+                    activeRow = document.querySelector("#produkTable tbody tr");
+                }
+
+                if (activeRow) {
+                    const idProdukInput = activeRow.querySelector('.id_produk');
+                    idProdukInput.value = produkName;
+
+                    const produkIdInput = activeRow.querySelector('.produk_id');
+                    produkIdInput.value = produkId;
+
+                    const hiddenInput = activeRow.querySelector('.id_varian');
+                    hiddenInput.value = produkId;
+
+                    // Ambil daftar warna berdasarkan produk yang dipilih
+                    fetch(`/get-varians/${produkId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const warnaDropdown = activeRow.querySelector('.warna-select');
+                            warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                            data.warna.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item.warna;
+                                option.textContent = item.warna;
+                                warnaDropdown.appendChild(option);
+                            });
+                        });
+                }
+            });
+
+            // Event listener untuk modal close
+            $('#produkModal').on('hidden.bs.modal', function() {
+                resetSearchAndPagination(); // Reset pencarian dan pagination saat modal ditutup
+            });
+        });
     </script>
-@endsection
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi DataTables
+            $('#produkTableModal').DataTable({
+                "paging": true, // Aktifkan pagination
+                "searching": true, // Aktifkan fitur pencarian
+                "ordering": true, // Aktifkan sorting
+                "info": true, // Tampilkan informasi jumlah data
+                "language": {
+                    "search": "Cari:", // Ubah teks placeholder pencarian
+                    "paginate": {
+                        "previous": "Sebelumnya",
+                        "next": "Selanjutnya"
+                    }
+                }
+            });
+
+            // Event listener untuk tombol "Pilih"
+            $(document).on('click', '.buy-button', function() {
+                const produkId = $(this).data('id');
+                const produkName = $(this).data('name');
+
+                if (!activeRow) {
+                    activeRow = document.querySelector("#produkTable tbody tr");
+                }
+
+                if (activeRow) {
+                    const idProdukInput = activeRow.querySelector('.id_produk');
+                    idProdukInput.value = produkName;
+
+                    const produkIdInput = activeRow.querySelector('.produk_id');
+                    produkIdInput.value = produkId;
+
+                    const hiddenInput = activeRow.querySelector('.id_varian');
+                    hiddenInput.value = produkId;
+
+                    // Ambil daftar warna berdasarkan produk yang dipilih
+                    fetch(`/get-varians/${produkId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const warnaDropdown = activeRow.querySelector('.warna-select');
+                            warnaDropdown.innerHTML = '<option value="" disabled selected>-</option>';
+                            data.warna.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item.warna;
+                                option.textContent = item.warna;
+                                warnaDropdown.appendChild(option);
+                            });
+                        });
+                }
+            });
+        });
+    </script>
+@endpush

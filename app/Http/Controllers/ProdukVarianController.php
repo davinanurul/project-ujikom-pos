@@ -53,4 +53,32 @@ class ProdukVarianController extends Controller
 
         return redirect()->route('produk_varian.index')->with('success', 'Varian produk berhasil ditambahkan.');
     }
+
+    public function exportPDF(Request $request)
+    {
+        // Ambil ID produk dari request (jika ada), default ke null jika kosong
+        $idProduk = $request->query('id_produk');
+
+        // Query produk varian (tampilkan semua jika tidak difilter)
+        $produkVarians = ProdukVarian::with(['detailTransaksi' => function ($query) {
+            $query->selectRaw('id_varian, SUM(qty) as total_terjual')
+                ->groupBy('id_varian');
+        }])
+            ->when(!empty($idProduk), function ($query) use ($idProduk) {
+                return $query->where('id_produk', $idProduk);
+            })
+            ->get();
+
+        // Data untuk PDF
+        $data = [
+            'produkVarians' => $produkVarians,
+            'idProduk' => $idProduk,
+        ];
+
+        // Load view dan generate PDF
+        $pdf = Pdf::loadView('produk_varian.pdf', $data);
+
+        // Download PDF
+        return $pdf->download('laporan-produk-varian.pdf');
+    }
 }

@@ -31,13 +31,17 @@
                         <label for="nama">Nama</label>
                         <input type="text" name="nama" id="nama" class="form-control" required>
                     </div>
-                    <div class="form-group mt-0">
-                        <label for="gambar">Gambar Produk (Opsional)</label>
-                        <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
-                        <div class="mt-2" id="preview-container" style="display: none;">
-                            <img id="preview" alt="Pratinjau Gambar" width="150">
+                    <div class="form-group">
+                        <label for="gambar" class="form-label">Gambar Produk (Opsional)</label>
+                        <div class="custom-file">
+                            <input type="file" name="gambar" id="gambar" class="custom-file-input" accept="image/*">
+                            <label class="custom-file-label" for="gambar">Pilih Gambar</label>
+                        </div>
+                        <div class="mt-3" id="preview-container" style="display: none;">
+                            <img id="preview" alt="Pratinjau Gambar" class="img-thumbnail" width="150">
                         </div>
                     </div>
+                    
                     <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ route('produk.index') }}" class="btn btn-secondary me-1">Kembali</a>

@@ -5,13 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\PengajuanBarang;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PengajuanBarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengajuans = PengajuanBarang::all();
+        $query = PengajuanBarang::orderBy('created_at', 'desc');
+
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $tanggalMulai = Carbon::parse($request->tanggal_mulai)->startOfDay();
+            $tanggalSelesai = Carbon::parse($request->tanggal_selesai)->endOfDay();
+
+            $query->whereBetween('created_at', [$tanggalMulai, $tanggalSelesai]);
+        }
+
+        $pengajuans = $query->get();
         $members = \App\Models\Member::all();
+
         return view('pengajuan_barang.index', compact('pengajuans', 'members'));
     }
 

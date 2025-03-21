@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Laporan Pengajuan Barang</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengajuan Barang</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1>Laporan Pengajuan Barang</h1>
-    <table border="1" cellpadding="10" cellspacing="0">
+    <h1 style="text-align: center">Laporan Pengajuan Barang</h1>
+    <table>
         <thead>
             <tr>
-                <th>No</th>
+                <th>Nama Pengaju</th>
                 <th>Nama Barang</th>
+                <th>Qty</th>
                 <th>Tanggal Pengajuan</th>
-                <th>Jumlah</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($pengajuans as $index => $pengajuan)
+            @foreach ($pengajuans as $pengajuan)
                 <tr>
-                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $pengajuan->nama_pengaju }}</td>
                     <td>{{ $pengajuan->nama_barang }}</td>
-                    <td>{{ $pengajuan->tanggal_pengajuan}}</td>
                     <td>{{ $pengajuan->qty }}</td>
-                    <td>{{ $pengajuan->terpenuhi ? 'Sudah Terpenuhi' : 'Belum Terpenuhi' }}</td>
+                    <td>{{ $pengajuan->tanggal_pengajuan }}</td>
+                    <td>{{ $pengajuan->terpenuhi ? 'Terpenuhi' : 'Belum Terpenuhi' }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -2,38 +2,46 @@
 @section('title', 'Pengajuan Barang')
 @section('content')
     <div class="container-fluid">
-        <div class="d-flex justify-content-between mb-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pengajuanBarangModal">
-                Buat Pengajuan Barang
-            </button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="btn-group">
-                <!-- Form Filter -->
-                <form method="GET" action="{{ route('pengajuanBarang.index') }}" class="form-inline di-flex gap 2">
-                    <div class="btn-group">
-                        <input type="date" name="tanggal_mulai" class="form-control w-auto"
-                            value="{{ request('tanggal_mulai') }}">
-                        <input type="date" name="tanggal_selesai" class="form-control w-auto"
-                            value="{{ request('tanggal_selesai') }}">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                        <a href="{{ route('pengajuanBarang.index') }}" class="btn btn-secondary ">Reset</a>
-                    </div>
+                <!-- Tombol "Buat Pengajuan Barang" -->
+                <button type="button" class="btn btn-primary rounded-0" data-toggle="modal"
+                    data-target="#pengajuanBarangModal">
+                    <i class="fas fa-plus"></i> Buat Pengajuan
+                </button>
 
-                </form>
+                <!-- Dropdown Export -->
                 <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="exportDropdown"
+                    <button class="btn btn-success dropdown-toggle rounded-0" type="button" id="exportDropdown"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-download"></i> Export
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="exportDropdown">
-                        <a class="dropdown-item" href="#" id="exportExcel"><i class="fas fa-file-excel"></i> Export
-                            Excel</a>
-                        {{-- <a class="dropdown-item" href="#" id="exportPDF"><i class="fas fa-file-pdf"></i> Export
-                            PDF</a> --}}
-                        <a class="dropdown-item"
-                            href="{{ route('Pengajuan_barang.index', ['export_pdf' => true, 'tanggal_mulai' => request('tanggal_mulai'), 'tanggal_selesai' => request('tanggal_selesai')]) }}"><i
-                                class="fas fa-file-pdf"></i> Ekspor PDF</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="exportDropdown">
+                        <a class="dropdown-item" href="#" id="exportExcel">
+                            <i class="fas fa-file-excel text-success"></i> Export Excel
+                        </a>
+                        <a class="dropdown-item" href="{{ route('pengajuanBarang.exportPDF') }}" id="exportPDF">
+                            <i class="fas fa-file-pdf text-danger"></i> Export PDF
+                        </a>
                     </div>
                 </div>
+            </div>
+
+            <!-- Grup Filter dan Export -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Form Filter -->
+                <form method="GET" action="{{ route('pengajuanBarang.index') }}" class="form-inline d-flex gap-2">
+                    <div class="input-group">
+                        <input type="date" name="tanggal_mulai" class="form-control"
+                            value="{{ request('tanggal_mulai') }}">
+                        <input type="date" name="tanggal_selesai" class="form-control"
+                            value="{{ request('tanggal_selesai') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary"></i> Filter</button>
+                            <a href="{{ route('pengajuanBarang.index') }}" class="btn btn-secondary"> Reset</a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- DataTales Example -->
@@ -203,6 +211,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         $(document).ready(function() {
@@ -333,6 +346,39 @@
                     text: {!! json_encode(session('error')) !!}
                 });
             @endif
+        });
+        $(document).ready(function() {
+            $('.custom-control-input').on('change', function() {
+                let pengajuanId = $(this).attr('id').replace('terpenuhiSwitch', '');
+                let terpenuhi = $(this).is(':checked') ? 1 : 0;
+
+                $.ajax({
+                    url: "/pengajuan/" + pengajuanId + "/update-terpenuhi",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        terpenuhi: terpenuhi
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Gagal memperbarui status.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endpush

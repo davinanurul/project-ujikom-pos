@@ -86,7 +86,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('pengajuan/{id}', [PengajuanBarangController::class, 'update'])->name('pengajuanBarang.update');
     Route::delete('/pengajuan-barang/{id}', [PengajuanBarangController::class, 'destroy'])->name('pengajuanBarang.destroy');
     Route::get('/data-pengajuan', [PengajuanBarangController::class, 'getDataPengajuan']);
-    Route::get('/pengajuan-barang', [PengajuanBarangController::class, 'index'])->name('Pengajuan_barang.index');
+    Route::post('/pengajuan/{id}/update-terpenuhi', [PengajuanBarangController::class, 'updateTerpenuhi']);
+    Route::get('/pengajuan/export-pdf', [PengajuanBarangController::class, 'exportPDF'])->name('pengajuanBarang.exportPDF');
+    Route::post('/pengajuan/{id}/update-terpenuhi', [PengajuanBarangController::class, 'updateTerpenuhi'])->name('pengajuan.updateTerpenuhi');
 });
 
 // Route untuk Login

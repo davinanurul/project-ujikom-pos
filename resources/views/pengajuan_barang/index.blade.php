@@ -27,8 +27,11 @@
                     <div class="dropdown-menu" aria-labelledby="exportDropdown">
                         <a class="dropdown-item" href="#" id="exportExcel"><i class="fas fa-file-excel"></i> Export
                             Excel</a>
-                        <a class="dropdown-item" href="#" id="exportPDF"><i class="fas fa-file-pdf"></i> Export
-                            PDF</a>
+                        {{-- <a class="dropdown-item" href="#" id="exportPDF"><i class="fas fa-file-pdf"></i> Export
+                            PDF</a> --}}
+                        <a class="dropdown-item"
+                            href="{{ route('Pengajuan_barang.index', ['export_pdf' => true, 'tanggal_mulai' => request('tanggal_mulai'), 'tanggal_selesai' => request('tanggal_selesai')]) }}"><i
+                                class="fas fa-file-pdf"></i> Ekspor PDF</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +67,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input"
                                                 id="terpenuhiSwitch{{ $pengajuan->id }}"
-                                                {{ $pengajuan->terpenuhi ? 'checked' : '' }} disabled>
+                                                {{ $pengajuan->terpenuhi ? 'checked' : '' }}>
                                             <label class="custom-control-label"
                                                 for="terpenuhiSwitch{{ $pengajuan->id }}"></label>
                                         </div>

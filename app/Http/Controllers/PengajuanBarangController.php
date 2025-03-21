@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\PengajuanBarang;
 use App\Models\Produk;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -22,33 +24,15 @@ class PengajuanBarangController extends Controller
         }
 
         $pengajuans = $query->get();
-        $members = \App\Models\Member::all();
+        $members = Member::all();
 
-        return view('pengajuan_barang.index', compact('pengajuans', 'members'));
+        if ($request->has('export_pdf')) {
+            $pdf = Pdf::loadView('Pengajuan_barang.pdf', compact('pengajuans', 'members'));
+            return $pdf->stream('Pengajuan_barang.pdf');
+        }
+
+        return view('Pengajuan_barang.index', compact('pengajuans', 'members'));
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'nama_pengaju' => 'required|string|max:255',
-    //         'nama_barang' => 'required|string|max:255',
-    //         'qty' => 'required|integer|min:1',
-    //     ]);
-
-    //     // Cek apakah barang sudah ada di tabel produk
-    //     if (Produk::where('nama', $request->nama_barang)->exists()) {
-    //         return redirect()->route('pengajuanBarang.index')->with('error', 'Barang yang anda ajukan sudah ada di daftar produk!');
-    //     }
-
-    //     PengajuanBarang::create([
-    //         'nama_pengaju' => $request->nama_pengaju,
-    //         'nama_barang' => $request->nama_barang,
-    //         'qty' => $request->qty,
-    //         'terpenuhi' => false,
-    //     ]);
-
-    //     return redirect()->route('pengajuanBarang.index')->with('success', 'Pengajuan berhasil dibuat!');
-    // }
 
     public function store(Request $request)
     {

@@ -109,7 +109,7 @@
                         @foreach ($produks as $produk)
                             <div class="col">
                                 <div class="card h-100">
-                                    <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" class="card-img-top" alt="{{ $produk->name }}" style="height: 150px; object-fit: cover;">
+                                    <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" class="card-img-top" alt="{{ $produk->name }}" style="height: 170px; object-fit: cover;">
                                     <div class="card-body text-center">
                                         <h6 class="card-title">{{ $produk->nama }}</h6>
                                         <button type="button" class="btn btn-primary btn-block buy-button" data-id="{{ $produk->id }}" data-name="{{ $produk->nama }}" data-bs-dismiss="modal">Pilih</button>

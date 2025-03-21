@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Tambah Varian Produk')
 @section('content')
+<div class="container-fluid">
     <div class="page-body">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -49,4 +50,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

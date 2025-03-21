@@ -56,6 +56,10 @@ class PenerimaanBarangController extends Controller
         // Update stok produk_varian
         ProdukVarian::where('id', $request->id_varian)->increment('stok', $request->qty);
 
+        // Panggil cekTerpenuhi setelah produk ditambahkan
+        $pengajuanBarangController = new PengajuanBarangController();
+        $pengajuanBarangController->cekTerpenuhi();
+
         return redirect()->route('penerimaan_barang.index')->with('success', 'Data Penerimaan Barang berhasil disimpan dan stok telah diperbarui!');
     }
 

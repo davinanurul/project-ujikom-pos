@@ -125,4 +125,20 @@ class TransaksiController extends Controller
             'id_varian' => $varian ? $varian->id : null,
         ]);
     }
+
+    public function getTransaksiHarian()
+    {
+        $transaksiHarian = Transaksi::getTransaksiHarian();
+
+        // Format data untuk Chart.js
+        $labels = $transaksiHarian->pluck('tanggal');
+        $jumlahTransaksi = $transaksiHarian->pluck('jumlah_transaksi');
+        $totalPendapatan = $transaksiHarian->pluck('total_pendapatan');
+
+        return response()->json([
+            'labels' => $labels,
+            'jumlah_transaksi' => $jumlahTransaksi,
+            'total_pendapatan' => $totalPendapatan,
+        ]);
+    }
 }

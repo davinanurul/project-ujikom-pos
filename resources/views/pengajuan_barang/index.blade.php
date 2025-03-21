@@ -79,6 +79,12 @@
                                             onclick="confirmDelete('{{ $pengajuan->id }}')">
                                             <i class="fas fa-trash-alt"></i> Hapus
                                         </button>
+                                        <form id="delete-form-{{ $pengajuan->id }}"
+                                            action="{{ route('pengajuanBarang.destroy', $pengajuan->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -139,17 +145,35 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Kategori</h5>
+                    <h5 class="modal-title">Edit Pengajuan Barang</h5>
                 </div>
                 <form id="editForm" action="" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <input type="hidden" id="edit_id" name="id">
+                        <input type="hidden" id="edit_id" name="id" value="{{ old('id') }}">
+
+                        <!-- Nama Pengaju -->
                         <div class="form-group">
-                            <label>Nama Kategori</label>
-                            <input type="text" class="form-control" id="edit_nama_kategori" name="nama_kategori"
+                            <label for="nama_pengaju">Nama Pengaju</label>
+                            <select class="form-control" id="nama_pengaju" name="nama_pengaju" required>
+                                <option value="" disabled>Pilih Nama Pengaju</option>
+                                @foreach ($members as $member)
+                                    <option value="{{ $member->nama }}"
+                                        {{ old('nama_pengaju') == $member->nama ? 'selected' : '' }}>
+                                        {{ $member->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_nama_barang">Nama Barang</label>
+                            <input type="text" class="form-control" id="edit_nama_barang" name="nama_barang"
                                 required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_qty">Qty</label>
+                            <input type="number" class="form-control" id="edit_qty" name="qty" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -178,24 +202,24 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var table = $('#pengajuanTable').DataTable({
                 dom: "<'row'<'col-md-6'l><'col-md-6'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-md-6'i><'col-md-6'p>>",
-                buttons: [
-                    {
+                buttons: [{
                         extend: 'excelHtml5',
                         className: 'btn btn-success',
                         title: 'Pengajuan-Barang',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5],
                             format: {
-                                body: function (data, row, column, node) {
+                                body: function(data, row, column, node) {
                                     // Cek kolom ke-5 (index 5) untuk status Terpenuhi
                                     if (column === 5) {
                                         // Cek apakah switch dalam keadaan checked atau tidak
-                                        return $(node).find('input[type="checkbox"]').is(':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
+                                        return $(node).find('input[type="checkbox"]').is(
+                                            ':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
                                     }
                                     return data;
                                 }
@@ -209,9 +233,10 @@
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5],
                             format: {
-                                body: function (data, row, column, node) {
+                                body: function(data, row, column, node) {
                                     if (column === 5) {
-                                        return $(node).find('input[type="checkbox"]').is(':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
+                                        return $(node).find('input[type="checkbox"]').is(
+                                            ':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
                                     }
                                     return data;
                                 }
@@ -225,9 +250,10 @@
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5],
                             format: {
-                                body: function (data, row, column, node) {
+                                body: function(data, row, column, node) {
                                     if (column === 5) {
-                                        return $(node).find('input[type="checkbox"]').is(':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
+                                        return $(node).find('input[type="checkbox"]').is(
+                                            ':checked') ? 'Terpenuhi' : 'Belum Terpenuhi';
                                     }
                                     return data;
                                 }
@@ -243,27 +269,31 @@
                     url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/Indonesian.json"
                 }
             });
-    
+
             // Tombol Export Khusus Tabel Ini
-            $('#exportExcel').click(function () {
+            $('#exportExcel').click(function() {
                 table.button(0).trigger();
             });
-    
-            $('#exportPDF').click(function () {
+
+            $('#exportPDF').click(function() {
                 table.button(1).trigger();
             });
         });
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const nama = this.getAttribute('data-nama');
-                document.getElementById('edit_id').value = id;
-                document.getElementById('edit_nama_kategori').value = nama;
-                document.getElementById('editForm').action = `/kategori/${id}`;
+        $(document).ready(function() {
+            $('.edit-btn').on('click', function() {
+                const id = $(this).data('id');
+                const namaPengaju = $(this).data('nama');
+                const namaBarang = $(this).closest('tr').find('td:eq(2)').text();
+                const qty = $(this).closest('tr').find('td:eq(4)').text();
+
+                $('#edit_id').val(id);
+                $('#edit_nama_barang').val(namaBarang);
+                $('#edit_qty').val(qty);
+                $('#editForm').attr('action', `/pengajuan/${id}`);
             });
         });
 
@@ -279,7 +309,7 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/pengajuan-barang/delete/' + id;
+                    document.getElementById('delete-form-' + id).submit();
                 }
             });
         }

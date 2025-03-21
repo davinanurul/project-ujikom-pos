@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanBarang extends Model
 {
@@ -30,5 +31,16 @@ class PengajuanBarang extends Model
                 $model->tanggal_pengajuan = now()->format('Y-m-d');
             }
         });
+    }
+
+    public static function getDataPengajuan()
+    {
+        return DB::table('pengajuan_barang')
+            ->select(
+                DB::raw('COUNT(*) as total'),
+                'terpenuhi'
+            )
+            ->groupBy('terpenuhi')
+            ->get();
     }
 }

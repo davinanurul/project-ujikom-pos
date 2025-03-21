@@ -17,9 +17,9 @@ class Transaksi extends Model
         'tanggal',
         'user_id',
         'member_id',
-        'total', 
+        'total',
         'pembayaran'
-    ];    
+    ];
 
     // Relasi ke User
     public function user()
@@ -52,5 +52,18 @@ class Transaksi extends Model
         }
 
         return 'TRX-' . $date . '-' . $nextNumber;
+    }
+
+    public static function getTransaksiHarian()
+    {
+        return DB::table('transaksi')
+            ->select(
+                DB::raw('DATE(tanggal) as tanggal'), // Ambil tanggal saja (tanpa waktu)
+                DB::raw('COUNT(id) as jumlah_transaksi'), // Hitung jumlah transaksi
+                DB::raw('SUM(total) as total_pendapatan') // Hitung total pendapatan
+            )
+            ->groupBy('tanggal') // Kelompokkan berdasarkan tanggal
+            ->orderBy('tanggal', 'asc') // Urutkan berdasarkan tanggal
+            ->get();
     }
 }

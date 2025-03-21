@@ -78,11 +78,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-varian/{produk_id}/{warna}/{size}', [TransaksiController::class, 'getVarian']);
     Route::get('/transaksi/{id}/details', [TransaksiController::class, 'details'])->name('transaksi.details');
     Route::get('/export-pdf', [TransaksiController::class, 'exportPDF'])->name('export.pdf');
+    Route::get('/transaksi-harian', [TransaksiController::class, 'getTransaksiHarian']);
 
     // Route Pengajuan Barang
     Route::get('index', [PengajuanBarangController::class, 'index'])->name('pengajuanBarang.index');
     Route::post('pengajuan/store', [PengajuanBarangController::class, 'store'])->name('pengajuanBarang.store');
-
+    Route::put('pengajuan/{id}', [PengajuanBarangController::class, 'update'])->name('pengajuanBarang.update');
+    Route::delete('/pengajuan-barang/{id}', [PengajuanBarangController::class, 'destroy'])->name('pengajuanBarang.destroy');
+    Route::get('/data-pengajuan', [PengajuanBarangController::class, 'getDataPengajuan']);
 });
 
 // Route untuk Login

@@ -173,4 +173,12 @@ class TransaksiController extends Controller
         // Download PDF
         return $pdf->download('laporan-transaksi.pdf');
     }
+
+    public function details($id)
+    {
+        $transaksi = Transaksi::findOrFail($id);
+        $detailTransaksi = $transaksi->detailTransaksi; // Ambil detail transaksi berdasarkan transaksi_id
+
+        return view('transaksi.details', compact('transaksi', 'detailTransaksi'));
+    }
 }

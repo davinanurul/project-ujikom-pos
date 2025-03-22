@@ -27,16 +27,40 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                         </div>
+
                         <form class="user" action="{{ route('login') }}" method="POST">
                             @csrf
+                        
+                            <!-- Alert umum di atas form -->
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        
+                            <!-- Input Username -->
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" id="user_nama" name="user_nama" placeholder="Enter Username" required>
+                                <input type="text" class="form-control form-control-user @error('user_nama') is-invalid @enderror" id="user_nama" name="user_nama" placeholder="Enter Username" value="{{ old('user_nama') }}">
+                                @error('user_nama')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+                        
+                            <!-- Input Password -->
                             <div class="form-group">
-                                <input type="password" class="form-control form-control-user" id="user_pass" name="user_pass" placeholder="Enter Password" required>
+                                <input type="password" class="form-control form-control-user @error('user_pass') is-invalid @enderror" id="user_pass" name="user_pass" placeholder="Enter Password">
+                                @error('user_pass')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+                        
                             <button class="btn btn-primary btn-user btn-block mt-3" type="submit">Login</button>
                         </form>
+                        
                     </div>
                 </div>
             </div>

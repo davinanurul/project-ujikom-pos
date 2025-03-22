@@ -61,7 +61,7 @@ class TransaksiController extends Controller
             'tanggal' => now(),
             'member_id' => $request->member_id,
             'pembayaran' => $request->pembayaran,
-            'total' => preg_replace('/[^\d]/', '', $request->total), // Pastikan total tanpa desimal
+            'total' => preg_replace('/[^\d]/', '', $request->total),
             'user_id' => Auth::id(),
         ]);
 
@@ -77,8 +77,8 @@ class TransaksiController extends Controller
                     'produk_id' => $produk_id,
                     'id_varian' => $varian->id,
                     'qty' => $request->qty[$index],
-                    'harga' => preg_replace('/[^\d]/', '', $request->harga[$index]), // Pastikan harga tanpa desimal
-                    'subtotal' => preg_replace('/[^\d]/', '', $request->subtotal[$index]), // Pastikan subtotal tanpa desimal
+                    'harga' => preg_replace('/[^\d]/', '', $request->harga[$index]),
+                    'subtotal' => preg_replace('/[^\d]/', '', $request->subtotal[$index]),
                 ]);
 
                 // Kurangi stok
@@ -87,7 +87,12 @@ class TransaksiController extends Controller
             }
         }
 
-        return redirect()->route('transaksi.create')->with('success', 'Transaksi berhasil dibuat');
+        // Kembalikan response JSON dengan pilihan
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaksi berhasil dibuat',
+            'transaksi_id' => $transaksi->id,
+        ]);
     }
 
     public function getVariansByProduk($produkId)

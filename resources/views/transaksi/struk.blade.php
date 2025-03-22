@@ -11,7 +11,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Informasi Transaksi</h6>
                         </div>
                         <div class="card">
-                            <div class="card-body" id="print-area">
+                            <div class="card-body">
                                 <table class="table table-borderless" style="margin-bottom: 3%">
                                     <tbody>
                                         <tr>
@@ -50,26 +50,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($detailTransaksi as $detail)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">
-                                                    {{ $detail->produk->nama ?? 'Produk tidak ditemukan' }}</td>
-                                                <td class="text-center">
-                                                    {{ $detail->varian->warna ?? 'Produk tidak ditemukan' }}</td>
-                                                <td class="text-center">
-                                                    {{ $detail->varian->size ?? 'Produk tidak ditemukan' }}</td>
-                                                <td class="text-center">{{ $detail->qty }}</td>
-                                                <td class="text-right">{{ number_format($detail->harga) }}</td>
-                                                <td class="text-right">{{ number_format($detail->subtotal) }}</td>
-                                            </tr>
+                                        @foreach($detailTransaksi as $detail)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="text-center">{{ $detail->produk->nama ?? 'Produk tidak ditemukan' }}</td>
+                                            <td class="text-center">{{ $detail->varian->warna ?? 'Produk tidak ditemukan' }}</td>
+                                            <td class="text-center">{{ $detail->varian->size ?? 'Produk tidak ditemukan' }}</td>
+                                            <td class="text-center">{{ $detail->qty }}</td>
+                                            <td class="text-right">{{ number_format($detail->harga) }}</td>
+                                            <td class="text-right">{{ number_format($detail->subtotal) }}</td>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="mt-4">
-                                <a href="{{ route('transaksi.index') }}" class="btn btn-primary">Kembali</a>
-                                <button onclick="window.print()" class="btn btn-success">Cetak</button>
+
+                                <div class="mt-4">
+                                    <a href="{{ route('transaksi.index') }}" class="btn btn-primary">Kembali</a>
+                                </div>
                             </div>
                         </div>
                     </div>

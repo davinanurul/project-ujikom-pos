@@ -81,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export-pdf', [TransaksiController::class, 'exportPDF'])->name('export.pdf');
     Route::get('/transaksi-harian', [TransaksiController::class, 'getTransaksiHarian']);
     Route::get('/transaksi/export-pdf', [TransaksiController::class, 'exportPDF'])->name('transaksi.exportPDF');
+    Route::get('/transaksi/details/{id}', [TransaksiController::class, 'details'])->name('transaksi.details');
 
     // Route Pengajuan Barang
     Route::get('index', [PengajuanBarangController::class, 'index'])->name('pengajuanBarang.index');

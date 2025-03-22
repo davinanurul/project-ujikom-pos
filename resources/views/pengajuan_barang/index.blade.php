@@ -364,7 +364,7 @@
                             icon: 'success',
                             title: 'Berhasil!',
                             text: response.message,
-                            timer: 1500,
+                            timer: 2000,
                             showConfirmButton: false
                         });
                     },
@@ -373,7 +373,7 @@
                             icon: 'error',
                             title: 'Gagal!',
                             text: 'Gagal memperbarui status.',
-                            timer: 1500,
+                            timer: 2000,
                             showConfirmButton: false
                         });
                     }

@@ -7,7 +7,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Form Transaksi</h6>
             </div>
             <div class="card-body">
-                <form action="{{ route('transaksi.store') }}" method="POST">
+                <form id="transaksiForm" action="{{ route('transaksi.store') }}" method="POST">
                     @csrf
                     <div class="table table-borderless">
                         <table style="width: 100%">
@@ -151,6 +151,7 @@
     <!-- DataTables JavaScript -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         let activeRow = null;
 
@@ -322,7 +323,7 @@
             function showPage(page) {
                 produkItems.hide(); // Sembunyikan semua produk
                 produkItems.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-            .show(); // Tampilkan produk untuk halaman tertentu
+                    .show(); // Tampilkan produk untuk halaman tertentu
             }
 
             // Fungsi untuk mengupdate pagination
@@ -500,6 +501,49 @@
                     text: {!! json_encode(session('error')) !!}
                 });
             @endif
+        });
+    </script>
+    <script>
+        document.getElementById('transaksiForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Mencegah form submit biasa
+    
+            const formData = new FormData(this);
+    
+            fetch("{{ route('transaksi.store') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan SweetAlert dengan pilihan
+                        Swal.fire({
+                            title: 'Transaksi Berhasil!',
+                            text: 'Apa yang ingin Anda lakukan selanjutnya?',
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonText: 'Cetak Struk',
+                            cancelButtonText: 'Buat Transaksi Baru',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Redirect ke halaman detail transaksi
+                                window.location.href = "{{ route('transaksi.details', '') }}/" + data.transaksi_id;
+                            } else {
+                                // Langsung redirect ke halaman create transaksi
+                                window.location.href = "{{ route('transaksi.create') }}";
+                            }
+                        });
+                    } else {
+                        Swal.fire('Error', 'Terjadi kesalahan saat menyimpan transaksi.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'Terjadi kesalahan saat menyimpan transaksi.', 'error');
+                });
         });
     </script>
 @endpush

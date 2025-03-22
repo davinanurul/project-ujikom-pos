@@ -25,7 +25,6 @@
                                 <th class="text-center">Kategori</th>
                                 <th class="text-center">Kode</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">Gambar</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -37,13 +36,6 @@
                                     <td class="text-center">{{ $produk->kategori->nama_kategori }}</td>
                                     <td class="text-center">{{ $produk->kode }}</td>
                                     <td class="text-center">{{ $produk->nama }}</td>
-                                    <td>
-                                        @if ($produk->gambar)
-                                            <img src="{{ asset('/storage/produk-img/' . $produk->gambar) }}" alt="Gambar Produk" width="100">
-                                        @else
-                                            Tidak Ada Gambar
-                                        @endif
-                                    </td>
                                     <td class="text-center" style="width: 20%">
                                         <div class="btn-group">
                                             <a href="{{ route('produk.details', $produk->id) }}" class="btn btn-primary">

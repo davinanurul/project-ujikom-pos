@@ -64,7 +64,7 @@ class MemberController extends Controller
         $member->status = 'nonaktif';
         $member->save();
 
-        return redirect()->route('member.index')->with('success', 'Pengguna berhasil dinonaktifkan.');
+        return redirect()->route('member.index')->with('success', 'Member berhasil dinonaktifkan.');
     }
 
     public function aktifkanAkun($memberId)

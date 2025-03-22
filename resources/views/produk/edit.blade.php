@@ -46,8 +46,11 @@
                         </div>
 
                         <div class="form-group mt-0">
-                            <label for="gambar">Gambar Produk</label>
-                            <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
+                            <label for="gambar" class="form-label">Gambar Produk</label>
+                        <div class="custom-file">
+                            <input type="file" name="gambar" id="gambar" class="custom-file-input" accept="image/*">
+                            <label class="custom-file-label" for="gambar">Pilih Gambar</label>
+                        </div>
                             <div class="mt-2">
                                 <img id="preview"
                                     src="{{ $produk->gambar ? asset('storage/produk-img/' . $produk->gambar) : 'https://via.placeholder.com/150' }}"

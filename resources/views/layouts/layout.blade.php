@@ -369,7 +369,7 @@
                 <!-- Begin Page Content -->
                 @yield('content')
                 <!-- /.container-fluid -->
-
+w
             </div>
             <!-- End of Main Content -->
 

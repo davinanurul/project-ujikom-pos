@@ -21,7 +21,7 @@
                     <i class="fas fa-download"></i> Export
                 </button>
                 <div class="dropdown-menu" aria-labelledby="exportDropdown">
-                    <a class="dropdown-item" href="#" id="exportExcel">
+                    <a class="dropdown-item" href="{{ route('transactions.export') }}">
                         <i class="fas fa-file-excel"></i> Export Excel
                     </a>
                     <a class="dropdown-item" href="{{ route('transaksi.exportPDF', ['tanggal_mulai' => request('tanggal_mulai'), 'tanggal_selesai' => request('tanggal_selesai')]) }}" id="exportPDF">
